@@ -183,6 +183,27 @@ $still-max-h: 640px;
 // Side Builds: the project description under the metro map.
 .front-page p.project-text { margin: 0; font-size: 16px; }   // 80% of the page's 20px body text
 .project-name { text-transform: uppercase; letter-spacing: 0.04em; }
+// Design Studio: one toggle per category.
+.studio-group { border-top: 1px solid $f-text; }
+.studio-group:last-of-type { border-bottom: 1px solid $f-text; }
+.studio-group summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 14px 0;
+  font-family: $f-body;   // same face as the page title
+  font-size: 20px;
+  cursor: pointer;
+  list-style: none;
+}
+.studio-group summary:hover { color: var(--still-color, #{$f-muted}); }   // title and +/− together
+.studio-group summary::-webkit-details-marker { display: none; }
+.studio-group summary::after { content: "+"; font-family: $f-body; font-weight: 300; }
+.studio-group[open] summary::after { content: "\2212"; }   // minus sign
+.studio-body { overflow: hidden; }   // clips the content while its height animates
+.studio-body > :first-child { margin-top: 0; }
+.studio-body > :last-child { margin-bottom: 0; padding-bottom: 24px; }
+.studio-group.is-closing summary::after { content: "+"; }   // flip the sign as soon as closing starts
 // ---- Small screens: stack the menu above the content ----
 @media (max-width: 767px) {
   .front-side,

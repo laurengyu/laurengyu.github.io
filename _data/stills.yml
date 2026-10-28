@@ -9,10 +9,6 @@
   title: "Trois couleurs : Rouge"
   credit: Krzysztof Kieślowski, 1994, France / Switzerland / Poland
   color: "#ad3627"
-- file: watership-down.jpg
-  title: Watership Down
-  credit: Martin Rosen, 1978, UK
-  color: "#9aae61"
 - file: akira.jpg
   title: Akira
   credit: Katsuhiro Otomo, 1988, Japan
@@ -33,14 +29,6 @@
   title: Suspiria
   credit: Dario Argento, 1977, Italy
   color: "#912e38"
-- file: chinese-roulette.jpg
-  title: Chinese Roulette
-  credit: Rainer Werner Fassbinder, 1976, West Germany
-  color: "#6a5c30"
-- file: the-spy-who-came-in-from-the-cold.jpg
-  title: The Spy Who Came In from the Cold
-  credit: Martin Ritt, 1965, UK
-  color: "#6b6b6b"   # black-and-white film: no vivid colour, so the site's grey
 - file: doi-inthanon.jpg
   title: The King and Queen Pagodas, Doi Inthanon
   credit: photographed in August 2023, Chiang Mai, Thailand
