@@ -1,0 +1,43 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Privacy · Writing Analyzer</title>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..700&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#fffff8;--ink:#222;--mute:#999;--line:#ddd;--accent:#ad3627}
+  body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.6 Georgia,serif}
+  .page{max-width:640px;margin:0 auto;padding:48px 40px 96px}
+  h1{font-family:"Bodoni Moda",Georgia,serif;font-weight:400;font-size:36px;margin:0 0 4px}
+  .kicker{color:var(--mute);font-style:italic;margin:0 0 36px}
+  h2{font-size:15.6px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin:36px 0 8px}
+  p,li{margin:0 0 12px} ul{padding-left:1.2em}
+  a{color:var(--accent);text-decoration:none;border-bottom:1px solid #e2b8b1}
+  .foot{margin-top:72px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--mute)}
+  .foot a{color:var(--mute);border-color:var(--line)}
+</style></head>
+<body><div class="page">
+  <h1>Privacy</h1>
+  <p class="kicker">Writing Analyzer · last updated October 2026</p>
+
+  <p>The short version: your text is analyzed and then forgotten. I don’t keep it, read it, or share it.</p>
+
+  <h2>What happens to your text</h2>
+  <ul>
+    <li>When you click “Draw the portrait”, your text is sent over an encrypted (HTTPS) connection to a small server on Google Cloud Run.</li>
+    <li>The server counts and tags the words, sends the numbers back to your browser, and discards the text. It is never written to disk, a database or a log.</li>
+    <li>The server’s logs record only that a request happened and how many words it had, never the words themselves.</li>
+  </ul>
+
+  <h2>What I don’t do</h2>
+  <ul>
+    <li>No accounts, no cookies, no analytics or tracking scripts on this page.</li>
+    <li>Your text is not used to train any AI model, and it is not shared with anyone.</li>
+  </ul>
+
+  <h2>Third parties</h2>
+  <p>The page is hosted on GitHub Pages and the analysis runs on Google Cloud. Like any web host, they may keep standard technical logs (such as IP addresses) under their own privacy policies. Fonts load from Google Fonts. The “Buy me a coffee” link goes to buymeacoffee.com, which has its own policy.</p>
+
+  <h2>Questions</h2>
+  <p>Get in touch through <a href="https://laurengyu.github.io">laurengyu.github.io</a>.</p>
+
+  <footer class="foot"><a href="./">← Back to Writing Analyzer</a></footer>
+</div></body></html>

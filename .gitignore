@@ -9,3 +9,4 @@ vendor/
 # Local-only files (not part of the public repo)
 to-do list.md
 .claude/
+sample.txt
