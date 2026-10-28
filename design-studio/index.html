@@ -3,7 +3,7 @@ layout: front
 title: "Design Studio"
 redirect_from: /remix/
 body_class: front--pinned
-# Criterion Collection posters, newest first: add each new one at the top. Add `image: /assets/design/<file>.jpg` to swap a grey placeholder for the real poster.
+# Criterion Collection posters, newest first: add each new one at the top.
 posters:
   - title: "The Red Shoes"
     film: "Michael Powell and Emeric Pressburger, 1948, UK"
@@ -21,6 +21,14 @@ posters:
     film: "Alfred Hitchcock, 1927, UK"
     image: /assets/design/the-lodger.jpg
     description: "For me, this is the first true Hitchcock film. A silent thriller about a mysterious stranger suspected of being a serial killer, it is strikingly stylish, all fog, shadow and expressionist angles, and it already holds the themes he would return to for the rest of his career: the wrongly accused man, the icy blonde in danger, guilt passed from one character to another, and an audience made complicit in suspicion."
+# Other Designs, newest first. `image` is the thumbnail; `more` adds further versions to the detail view.
+others:
+  - title: "My Dance Dream"
+    film: "Performance poster, March 2015"
+    image: /assets/design/my-dance-dream.webp
+    more:
+      - /assets/design/my-dance-dream-alt.webp
+    description: "Poster for <em>My Dance Dream</em>, a ballet performance by the EastWest Dance Theater at Winston Churchill High School in Potomac, Maryland. Designed in March 2015. Shown in two versions."
 ---
 <article class="front-page">
   <h1>{{ page.title | escape }}</h1>
@@ -29,15 +37,7 @@ posters:
     <summary>Criterion Collection</summary>
     <div class="studio-body">
       <p class="studio-intro">I’ve long admired the Criterion Collection’s cover art. When a film I love feels like it belongs in the collection, I design a cover for it myself: part remix, part reinterpretation.</p>
-      <ul class="poster-row">
-        {%- for poster in page.posters %}
-        <li>
-          <button class="poster-thumb" type="button" data-index="{{ forloop.index0 }}" aria-label="Open {{ poster.title | escape }}">
-            {%- if poster.image %}<img src="{{ poster.image | relative_url }}" alt="">{% else %}<span class="poster-ph"></span>{% endif -%}
-          </button>
-        </li>
-        {%- endfor %}
-      </ul>
+      {% include poster-set.html items=page.posters set="criterion" part="row" %}
     </div>
   </details>
 
@@ -47,26 +47,16 @@ posters:
   </details>
 
   <details class="studio-group">
-    <summary>Other design commissions</summary>
-    <div class="studio-body"><p class="front-note">Coming soon.</p></div>
+    <summary>Other Designs</summary>
+    <div class="studio-body">
+      {% include poster-set.html items=page.others set="other" part="row" %}
+    </div>
   </details>
 </article>
 
-{%- comment -%} One detail view per poster: the image on the left, its notes in the blank space on the right. {%- endcomment %}
-{%- for poster in page.posters %}
-<dialog class="poster-view" id="poster-{{ forloop.index0 }}" aria-label="{{ poster.title | escape }}">
-  <button class="poster-close" type="button" aria-label="Close">&times;</button>
-  <div class="poster-full">
-    {%- if poster.image %}<img src="{{ poster.image | relative_url }}" alt="{{ poster.title | escape }}">{% else %}<span class="poster-ph"></span>{% endif -%}
-  </div>
-  <div class="poster-text">
-    <p class="poster-count">{{ forloop.index }} / {{ forloop.length }}</p>
-    <h2>{{ poster.title | escape }}</h2>
-    <p class="poster-film">{{ poster.film | escape }}</p>
-    <p>{{ poster.description }}</p>
-  </div>
-</dialog>
-{%- endfor %}
+{% include poster-set.html items=page.posters set="criterion" part="views" %}
+{% include poster-set.html items=page.others set="other" part="views" %}
+
 
 <script>
   // Smooth open/close: animate the body's height, and on close only drop `open` once it has folded away.
@@ -96,12 +86,13 @@ posters:
 
   // Poster thumbnails open their detail view; the ×, Esc or a click on the backdrop closes it.
   document.querySelectorAll(".poster-thumb").forEach(function (thumb) {
-    thumb.addEventListener("click", function () { document.getElementById("poster-" + thumb.dataset.index).showModal(); });
+    thumb.addEventListener("click", function () { document.getElementById(thumb.dataset.target).showModal(); });
   });
   // Swipe left/right (or the arrow keys) moves to the next or previous poster; it stops at either end.
   var views = Array.prototype.slice.call(document.querySelectorAll(".poster-view"));
   function step(view, by) {
-    var next = views[views.indexOf(view) + by];
+    var set = views.filter(function (v) { return v.dataset.set === view.dataset.set; });
+    var next = set[set.indexOf(view) + by];
     if (!next) return;
     view.close();
     next.showModal();

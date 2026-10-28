@@ -1,0 +1,36 @@
+{%- comment -%}
+  A row of thumbnails, each opening a detail view: the image on the left, its notes on the right.
+  include.items: list of { title, film, image, more (optional extra images), description }
+  include.set:   short id, so swiping stays within this set
+  include.part:  "row" for the thumbnails; "views" for the detail views, which must sit outside
+                 <details>: a closed <details> renders none of its content, not even a modal.
+{%- endcomment -%}
+{%- if include.part == "views" %}
+{%- for poster in include.items %}
+<dialog class="poster-view" id="{{ include.set }}-{{ forloop.index0 }}" data-set="{{ include.set }}" aria-label="{{ poster.title | escape }}">
+  <button class="poster-close" type="button" aria-label="Close">&times;</button>
+  <div class="poster-full">
+    <img src="{{ poster.image | relative_url }}" alt="{{ poster.title | escape }}">
+    {%- for extra in poster.more %}
+    <img src="{{ extra | relative_url }}" alt="{{ poster.title | escape }}, alternate version">
+    {%- endfor %}
+  </div>
+  <div class="poster-text">
+    <p class="poster-count">{{ forloop.index }} / {{ forloop.length }}</p>
+    <h2>{{ poster.title | escape }}</h2>
+    <p class="poster-film">{{ poster.film | escape }}</p>
+    <p>{{ poster.description }}</p>
+  </div>
+</dialog>
+{%- endfor %}
+{%- else %}
+<ul class="poster-row">
+  {%- for poster in include.items %}
+  <li>
+    <button class="poster-thumb" type="button" data-target="{{ include.set }}-{{ forloop.index0 }}" aria-label="Open {{ poster.title | escape }}">
+      <img src="{{ poster.image | relative_url }}" alt="">
+    </button>
+  </li>
+  {%- endfor %}
+</ul>
+{%- endif %}

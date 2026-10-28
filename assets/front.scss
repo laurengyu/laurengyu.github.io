@@ -227,7 +227,6 @@ $still-max-h: 640px;
   &:hover { transform: translateY(-3px); }
   img { display: block; width: 100%; }
 }
-.poster-ph { display: block; aspect-ratio: 2 / 3; background: #d9d9d9; }
 
 // Detail view: fills the space right of the menu and below the name; poster left, notes right.
 $poster-top: $f-top - 44px;   // just under the name, so "Lauren Y." stays whole
@@ -244,19 +243,20 @@ $poster-top: $f-top - 44px;   // just under the name, so "Lauren Y." stays whole
   background: $f-bg;
   color: $f-text;
   font-family: $f-body;
-  &[open] { display: flex; gap: 48px; align-items: flex-start; }
+  &[open] { display: flex; gap: 48px; align-items: flex-start; overflow-y: auto; }
   &::backdrop { background: transparent; }
   .poster-full { flex: none; }
   // Poster fits the window height (2:3), never wider than 420px.
-  .poster-full img, .poster-full .poster-ph {
+  // Each image fits the window height; extra versions follow underneath (the view scrolls).
+  .poster-full img {
     display: block;
     height: calc(100vh - #{$poster-top} - 44px - #{$f-pad});
     max-height: 630px;
     width: auto;
-    aspect-ratio: 2 / 3;
-    object-fit: contain;
+    max-width: 100%;
   }
-  .poster-text { flex: 0 1 320px; }
+  .poster-full img + img { margin-top: 24px; }
+  .poster-text { flex: 0 1 320px; position: sticky; top: 0; }   // notes stay put while extra versions scroll
   h2 { margin: 0 0 6px; font-size: 20px; font-weight: 600; }
   p { margin: 0 0 16px; font-size: 16px; line-height: 1.5; }
   .poster-film { color: $f-muted; }
@@ -295,6 +295,6 @@ $poster-top: $f-top - 44px;   // just under the name, so "Lauren Y." stays whole
   .poster-view { inset: 0; padding: 64px 20px 40px; overflow-y: auto; }
   .poster-view[open] { display: block; }   // stacked: poster, then notes underneath
   .poster-view .poster-full { margin-bottom: 24px; }
-  .poster-view .poster-full img, .poster-view .poster-full .poster-ph { width: 100%; height: auto; }
+  .poster-view .poster-full img { width: 100%; height: auto; max-height: none; }
   .poster-close { top: 20px; right: 20px; }
 }
