@@ -1,0 +1,11 @@
+_site/
+.jekyll-cache/
+.sass-cache/
+.jekyll-metadata
+.bundle/
+vendor/
+.DS_Store
+
+# Local-only files (not part of the public repo)
+to-do list.md
+.claude/

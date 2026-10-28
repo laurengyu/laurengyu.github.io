@@ -1,0 +1,180 @@
+---
+# Styles for the front page, About, and section pages (layout: front).
+# Modelled on andreasgursky.com (layout) with an uppercase Pathway Gothic One menu, image on the right.
+---
+
+$f-text:  #000;
+$f-muted: #6b6b6b;
+$f-bg:    #fff;
+$f-logo:  "EB Garamond", Garamond, "Times New Roman", serif;
+$f-menu:  "Pathway Gothic One", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+$f-sans:  "Archivo Narrow", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+$f-side:  280px;   // left column, incl. 40px page margin
+$f-pad:   40px;
+$f-top:   184px;   // where the menu and the image both start: ~46px gap under the name (logo to divider)
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { margin: 0; background: $f-bg; color: $f-text; }
+body {
+  font-family: $f-sans;
+  font-size: 15px;
+  line-height: 1.25;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+// Hover style for every link on these pages. On the front page, --hover is set to the
+// current still's colour (see index.html / _data/stills.yml); elsewhere it stays grey.
+a:hover { color: var(--hover, #{$f-muted}); }
+img { max-width: 100%; display: block; }
+
+// ---- Left column ----
+// Not fixed: the large name overhangs the right column, so it scrolls with the page.
+.front-side {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: $f-side;
+  padding: 40px 0 40px $f-pad;
+}
+// Name in EB Garamond Italic, set large as the site's logo. It spans the top of
+// the page, past the left column; the menu and image line up below it at $f-top.
+.front-name {
+  display: inline-block;
+  font-family: $f-logo;
+  font-style: italic;
+  font-size: 92px;
+  font-weight: 400;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  // Hover in the still colour on every page (pages without a still use the last-seen one).
+  &:hover { color: var(--still-color, #{$f-muted}); }
+}
+.front-menu { position: absolute; top: $f-top; left: $f-pad; }   // same top as the image
+// 3px divider above the menu, 84% of the menu's width, in the current still's colour
+// (--still-color; see _layouts/front.html). It sits 16px above the menu without moving it.
+.front-divider {
+  position: absolute;
+  top: -19px;   // -(16px gap + 3px height)
+  left: 0;
+  width: 84%;
+  height: 3px;
+  background: var(--still-color, #{$f-muted});
+}
+.front-menu ul { list-style: none; margin: 0; padding: 0; }
+.front-menu li { height: 32px; }
+.front-menu a {
+  font-family: $f-menu;   // single weight (400); sized and spaced like tarynsimon.com's menu
+  font-size: 21.6px;
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 21.6px;
+  text-transform: uppercase;
+  text-decoration: none;
+  // Pathway Gothic One has one weight; a same-colour outline thickens the strokes
+  // ~1.2x (0.44px on a ~2.2px stroke at 21.6px).
+  -webkit-text-stroke: 0.44px currentColor;
+  &[aria-current="page"] {   // current page: shown in the still colour (same as the divider)
+    color: var(--still-color, #{$f-muted});
+  }
+}
+.front-social {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px !important;
+  li { height: auto; }
+  a { display: block; width: 22px; height: 22px; }   // 85% of the original 26px
+  svg { width: 100%; height: 100%; display: block; }
+}
+
+// ---- Right column ----
+.front-main {
+  padding: $f-top $f-pad $f-pad $f-side;
+}
+
+// Front-page still: scaled to fit a box (like Gursky's site). The box is the
+// column width x the window height, capped at 900 x 640 so it never takes
+// over a big screen. Wide stills hit the width cap, tall ones the height cap.
+$still-max-w: 900px;
+$still-max-h: 640px;
+.still {
+  margin: 0;
+  img {
+    width: auto;
+    height: auto;
+    max-width: min(100%, #{$still-max-w});
+    // unquote(): Sass 3.7 (GitHub Pages) would otherwise treat CSS min() as its own function.
+    max-height: unquote("min(#{$still-max-h}, calc(100vh - #{$f-top} - 90px))");
+  }
+  figcaption {
+    margin-top: 20px;
+    font-family: $f-logo;   // same typeface as the text pages (EB Garamond, upright)
+    font-size: 16.8px;      // 120% of the original 14px
+    line-height: 20.4px;
+    strong { text-transform: uppercase; }   // "AKIRA, Katsuhiro Otomo, 1988, Japan" on one line
+  }
+}
+// Portrait stills (portrait: true in _data/stills.yml): caption at the image's bottom-right.
+.still--portrait {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+  img { min-width: 0; }
+  figcaption { margin-top: 0; white-space: nowrap; }
+}
+
+// About and section pages: readable text column.
+.front-page {
+  max-width: 640px;
+  font-size: 16px;
+  line-height: 1.5;
+  h1 {
+    margin: 0 0 24px;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.13em;
+    line-height: 15px;
+    text-transform: uppercase;
+  }
+  p { margin: 0 0 1em; }
+}
+// Heading and body on every front-layout text page (About, Personal Projects, Product & Data):
+// the logo's typeface (EB Garamond), upright. The Corner Shelf has its own stylesheet.
+.front-page {
+  h1, p { font-family: $f-logo; letter-spacing: normal; }
+  h1 { font-size: 22.5px; }   // 125% of the shared 18px
+  p { font-size: 20px; font-weight: 480; }   // 125% of 16px; EB Garamond is variable (400-800), 480 = a touch heavier than regular
+}
+// Small italic note at the end of a page (e.g. the About disclaimer).
+.front-page p.disclaimer {
+  margin-top: 2em;
+  font-size: 17px;
+  font-style: italic;
+  font-weight: 400;   // the italic is loaded at 400 only
+  line-height: 1.5;
+}
+// About photo floats right; the heading and text wrap around its left side.
+.about-photo {
+  width: 220px;
+  float: right;
+  margin: 6px 0 16px 28px;
+}
+.front-page .disclaimer { clear: both; }   // always starts below the photo
+.front-note { color: $f-muted; }
+
+// ---- Small screens: stack the menu above the content ----
+@media (max-width: 767px) {
+  .front-side {
+    position: static;
+    width: auto;
+    padding: 24px 20px 0;
+  }
+  .front-name { font-size: 72px; }
+  .front-menu { position: relative; top: auto; left: auto; margin-top: 40px; width: max-content; }   // max-content: divider stays 70% of the menu, as on desktop
+  .front-main { padding: 32px 20px 40px; }
+  .still img { max-width: 100%; max-height: none; }
+  .still--portrait { display: block; }
+  .still--portrait figcaption { margin-top: 20px; }
+  .about-photo { float: none; margin: 0 0 28px; }   // no text wrap on phones: too narrow beside the photo
+}

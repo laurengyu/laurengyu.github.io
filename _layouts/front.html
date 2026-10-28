@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {%- seo -%}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:ital,wght@0,400;0,700;1,400&family=EB+Garamond:ital,wght@0,400..800;1,400&family=Pathway+Gothic+One&display=swap">
+  <link rel="stylesheet" href="{{ '/assets/front.css' | relative_url }}">
+  {%- assign default_still = site.data.stills | first %}
+  <style>:root { --still-color: {{ default_still.color | default: "#6b6b6b" }}; }</style>
+  {%- comment -%}
+    Pages without a still (About etc.) keep the colour of the still the visitor last
+    saw on the front page; index.html saves it. Falls back to the first still's colour.
+  {%- endcomment %}
+  <script>
+    try {
+      var c = localStorage.getItem("stillColor");
+      if (/^#[0-9a-f]{6}$/i.test(c)) document.documentElement.style.setProperty("--still-color", c);
+    } catch (e) {}
+  </script>
+</head>
+<body class="front">
+  <aside class="front-side">
+    <a class="front-name" href="{{ '/' | relative_url }}">{{ site.title | escape }}</a>
+    <nav class="front-menu" aria-label="Site">
+      <span class="front-divider" aria-hidden="true"></span>
+      <ul>
+        {%- for item in site.front_menu -%}
+        {%- assign item_url = item.url | relative_url -%}
+        <li><a href="{{ item_url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.title | escape }}</a></li>
+        {%- endfor -%}
+      </ul>
+      <ul class="front-social">
+        <li><a href="{{ site.social.github }}" aria-label="GitHub">{% include icons/github.svg %}</a></li>
+        <li><a href="mailto:{{ site.social.email }}" aria-label="Email">{% include icons/email.svg %}</a></li>
+        <li><a href="{{ site.social.soundcloud }}" aria-label="SoundCloud">{% include icons/soundcloud.svg %}</a></li>
+      </ul>
+    </nav>
+  </aside>
+  <main class="front-main">
+    {{ content }}
+  </main>
+</body>
+</html>

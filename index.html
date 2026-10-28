@@ -1,0 +1,36 @@
+---
+layout: front
+---
+{%- assign first = site.data.stills | first -%}
+{%- if first.color %}<style>:root { --hover: {{ first.color }}; --still-color: {{ first.color }}; }</style>{% endif %}
+<figure class="still{% if first.portrait %} still--portrait{% endif %}" id="still">
+  <img src="{{ '/assets/stills/' | append: first.file | relative_url }}" alt="Still from {{ first.title | escape }}">
+  <figcaption>
+    <strong>{{ first.title | escape }}</strong>, {{ first.credit | escape }}
+  </figcaption>
+</figure>
+{%- comment -%}
+  The only JavaScript on the site: swap in a random still on each visit
+  (and use its colour for link hovers).
+  It runs before the first image has loaded, so there's no visible flicker.
+  Without JS, the first still in _data/stills.yml is shown.
+{%- endcomment -%}
+<script>
+  (function () {
+    var stills = {{ site.data.stills | jsonify }};
+    var s = stills[Math.floor(Math.random() * stills.length)];
+    var fig = document.getElementById("still");
+    var img = fig.querySelector("img");
+    img.src = {{ '/assets/stills/' | relative_url | jsonify }} + s.file;
+    img.alt = "Still from " + s.title;
+    fig.classList.toggle("still--portrait", !!s.portrait);
+    if (s.color) {
+      document.documentElement.style.setProperty("--hover", s.color);
+      document.documentElement.style.setProperty("--still-color", s.color);
+      try { localStorage.setItem("stillColor", s.color); } catch (e) {}
+    }
+    var cap = fig.querySelector("figcaption");
+    cap.querySelector("strong").textContent = s.title;
+    cap.lastChild.textContent = ", " + s.credit;
+  })();
+</script>

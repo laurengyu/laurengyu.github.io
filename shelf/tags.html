@@ -1,0 +1,34 @@
+---
+layout: page
+title: Tags
+permalink: /shelf/tags
+---
+{%- comment -%}
+  Lists every tag with its posts. Tags are turned into strings first (join),
+  because YAML reads a tag like 2026 as a number, which can't be sorted or
+  slugified alongside text. Each section id matches the #tag links on the
+  homepage and posts: tag | append: "" | slugify.
+{%- endcomment -%}
+{%- assign tag_names = site.posts | map: "tags" | join: "|" | split: "|" | uniq | sort_natural -%}
+<div class="cs-tag-index">
+  {%- for name in tag_names -%}
+  <section id="{{ name | slugify }}">
+    <h2 class="cs-tag-heading">#{{ name }}</h2>
+    <ul class="cs-post-list">
+      {%- for post in site.posts -%}
+        {%- assign post_tags = post.tags | join: "|" | split: "|" -%}
+        {%- if post_tags contains name -%}
+      <li class="cs-entry">
+        <div class="cs-entry__meta">
+          <a href="{{ post.url | relative_url }}">{{ post.date | date: "%Y-%m-%d" }}</a>
+        </div>
+        <div class="cs-entry__main">
+          <a class="cs-post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+        </div>
+      </li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ul>
+  </section>
+  {%- endfor -%}
+</div>

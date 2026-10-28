@@ -1,0 +1,68 @@
+title: "Lauren Y."
+description: "Personal projects, product & data, and The Corner Shelf, a reading blog."
+author: "Lauren Y."
+
+# Live address (GitHub Pages user site: repo laurengyu.github.io, served from the domain root).
+url: "https://laurengyu.github.io"
+baseurl: ""   # explicit, so the github-metadata plugin never guesses a sub-path
+
+theme: minima
+
+# ---- Front page / About / section pages (layout: front) ----
+# Left-hand menu, in order.
+front_menu:
+  - title: "Personal Projects"
+    url: "/projects/"
+  - title: "Product & Data"
+    url: "/product-data/"
+  - title: "The Classics Club"
+    url: "/shelf/"
+  - title: "About"
+    url: "/about/"
+
+# Icons under the menu.
+social:
+  soundcloud: "https://soundcloud.com/margot_albinus"
+  github: "https://github.com/laurengyu/"
+  email: "rearrange_stunt773@simplelogin.com"
+
+# ---- The Corner Shelf (everything under /shelf/, Tumblr look) ----
+shelf:
+  title: "The Corner Shelf"
+  description: "A reading blog by Helena L."
+  author: "Helena Lyndon"
+
+# Corner Shelf top nav (rendered by _includes/header.html).
+nav_links:
+  - title: "Booklist"
+    url: "/shelf/list"
+  - title: "Main Blog"
+    url: "/"
+  - title: "The Classics Club"
+    url: "https://theclassicsclubblog.wordpress.com/"
+
+# Posts are Corner Shelf posts: /shelf/2026/10/19/antony-and-cleopatra.html
+defaults:
+  - scope:
+      type: posts
+    values:
+      permalink: /shelf/:year/:month/:day/:title:output_ext
+      author: "Helena Lyndon"
+
+# Minima would otherwise auto-list every page in the nav.
+header_pages: []
+
+show_excerpts: false
+
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - assets/README.md
+  - .claude
+  - "to-do list.md"

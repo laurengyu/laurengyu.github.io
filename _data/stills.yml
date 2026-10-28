@@ -1,0 +1,31 @@
+# Front-page stills: one is picked at random on each visit.
+# To add one: drop the image in assets/stills/ and add an entry here.
+# For a tall (portrait) image, add `portrait: true`: its caption then sits at the
+# image's bottom-right instead of underneath, like Gursky's site.
+# `color` is the hover color for links while this still is shown. It starts as the
+# still's most vivid main color (computed once, not in the browser); change it to
+# any color you like, e.g. the colour that defines the film for you.
+- file: trois-couleurs-rouge.jpg
+  title: "Trois couleurs : Rouge"
+  credit: Krzysztof Kieślowski, 1994, France / Switzerland / Poland
+  color: "#ad3627"
+- file: watership-down.jpg
+  title: Watership Down
+  credit: Martin Rosen, 1978, UK
+  color: "#9aae61"
+- file: akira.jpg
+  title: Akira
+  credit: Katsuhiro Otomo, 1988, Japan
+  color: "#c36133"
+- file: millennium-actress.jpg
+  title: Millennium Actress
+  credit: Satoshi Kon, 2001, Japan
+  color: "#977332"
+- file: gattaca.jpg
+  title: Gattaca
+  credit: Andrew Niccol, 1997, USA
+  color: "#9b6714"
+- file: sense-and-sensibility.jpg
+  title: Sense and Sensibility
+  credit: Ang Lee, 1995, UK / USA
+  color: "#578947"

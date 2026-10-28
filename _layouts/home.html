@@ -1,0 +1,21 @@
+---
+layout: default
+---
+<div class="home">
+  {{ content }}
+  <ul class="cs-post-list">
+    {%- for post in site.posts -%}
+    <li class="cs-entry">
+      <div class="cs-entry__meta">
+        <a href="{{ post.url | relative_url }}">{{ post.date | date: "%Y-%m-%d" }}</a>
+      </div>
+      <div class="cs-entry__main">
+        <a class="cs-post-link" href="{{ post.url | relative_url }}">{{ post.title | escape }}</a>
+        {%- if post.tags.size > 0 -%}
+        <div class="cs-tags">{% for tag in post.tags %}<a href="{{ '/shelf/tags' | relative_url }}#{{ tag | append: "" | slugify }}">#{{ tag }}</a>{% endfor %}</div>
+        {%- endif -%}
+      </div>
+    </li>
+    {%- endfor -%}
+  </ul>
+</div>
