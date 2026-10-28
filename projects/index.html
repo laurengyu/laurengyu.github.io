@@ -1,8 +1,37 @@
 ---
 layout: front
 title: "Personal Projects"
+body_class: front--pinned
 ---
 <article class="front-page">
   <h1>{{ page.title | escape }}</h1>
-  <p class="front-note">Coming soon.</p>
+  {%- comment -%}
+    One row per project: a shape beside a text box. Shape and colour are picked at
+    random on each load by the script below. The text is placeholder for now.
+  {%- endcomment %}
+  <div class="project-list">
+    <a class="project-row" href="{{ '/projects/writing-analyzer/' | relative_url }}">
+      <span class="project-shape"></span>
+      <p class="project-text"><strong class="project-name">Writing Analyzer.</strong> What if your prose had a dashboard? Paste in a paragraph and watch it break down into numbers: sentence-length variance, verb-to-noun ratios, zombie nouns, adverb load, the rhythm of how your sentences open and close. It’s A/B testing for your drafts. Revise, re-run, and see exactly what moved.</p>
+    </a>
+    {%- for i in (2..6) %}
+    <div class="project-row">
+      <span class="project-shape"></span>
+      <p class="project-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    </div>
+    {%- endfor %}
+  </div>
+  <script>
+    (function () {
+      var shapes = ["circle", "ring", "diamond", "tri-up", "tri-down"];
+      var tones = ["base", "dark", "light", "warm"];
+      function pick(list) { return list[Math.floor(Math.random() * list.length)]; }
+      document.querySelectorAll(".project-shape").forEach(function (el) {
+        el.className += " shape--" + pick(shapes) + " tone--" + pick(tones);
+        // The project name takes the same colour as its shape.
+        var name = el.parentNode.querySelector(".project-name");
+        if (name) name.style.color = getComputedStyle(el).color;
+      });
+    })();
+  </script>
 </article>

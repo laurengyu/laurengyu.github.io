@@ -21,7 +21,7 @@
     } catch (e) {}
   </script>
 </head>
-<body class="front">
+<body class="front{% if page.body_class %} {{ page.body_class }}{% endif %}">
   <aside class="front-side">
     <a class="front-name" href="{{ '/' | relative_url }}">{{ site.title | escape }}</a>
     <nav class="front-menu" aria-label="Site">
@@ -29,7 +29,7 @@
       <ul>
         {%- for item in site.front_menu -%}
         {%- assign item_url = item.url | relative_url -%}
-        <li><a href="{{ item_url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.title | escape }}</a></li>
+        <li><a href="{{ item_url }}"{% assign url_head = page.url | slice: 0, item.url.size %}{% if url_head == item.url %} aria-current="page"{% endif %}>{{ item.title | escape }}</a></li>
         {%- endfor -%}
       </ul>
       <ul class="front-social">

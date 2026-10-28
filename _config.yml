@@ -66,3 +66,4 @@ exclude:
   - assets/README.md
   - .claude
   - "to-do list.md"
+  - plan.md
