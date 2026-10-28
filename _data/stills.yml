@@ -41,3 +41,11 @@
   title: The Spy Who Came In from the Cold
   credit: Martin Ritt, 1965, UK
   color: "#6b6b6b"   # black-and-white film: no vivid colour, so the site's grey
+- file: doi-inthanon.jpg
+  title: The King and Queen Pagodas, Doi Inthanon
+  credit: photograph by Lauren Y., August 2023, Chiang Mai, Thailand
+  color: "#657e36"
+- file: berlin-window.jpg
+  title: "Please don’t check yourself out"
+  credit: photograph by Lauren Y., December 2021, Berlin, Germany
+  color: "#336479"
