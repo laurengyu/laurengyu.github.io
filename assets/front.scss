@@ -7,6 +7,7 @@ $f-text:  #000;
 $f-muted: #6b6b6b;
 $f-bg:    #fff;
 $f-logo:  "EB Garamond", Garamond, "Times New Roman", serif;
+$f-body:  "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
 $f-menu:  "Pathway Gothic One", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
 $f-sans:  "Archivo Narrow", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
 $f-side:  280px;   // left column, incl. 40px page margin
@@ -109,9 +110,9 @@ $still-max-h: 640px;
   }
   figcaption {
     margin-top: 20px;
-    font-family: $f-logo;   // same typeface as the text pages (EB Garamond, upright)
-    font-size: 16.8px;      // 120% of the original 14px
-    line-height: 20.4px;
+    font-family: $f-body;   // same typeface as the text pages (Inter)
+    font-size: 14.5px;      // Inter's large x-height matches the old 16.8px Garamond
+    line-height: 20px;
     strong { text-transform: uppercase; }   // "AKIRA, Katsuhiro Otomo, 1988, Japan" on one line
   }
 }
@@ -140,18 +141,19 @@ $still-max-h: 640px;
   p { margin: 0 0 1em; }
 }
 // Heading and body on every front-layout text page (About, Personal Projects, Product & Data):
-// the logo's typeface (EB Garamond), upright. The Corner Shelf has its own stylesheet.
+// Inter, a Helvetica-like sans that also reads as transit signage on the projects map.
+// The logo stays in EB Garamond. The Corner Shelf has its own stylesheet.
 .front-page {
-  h1, p { font-family: $f-logo; letter-spacing: normal; }
-  h1 { font-size: 22.5px; }   // 125% of the shared 18px
-  p { font-size: 20px; font-weight: 480; }   // 125% of 16px; EB Garamond is variable (400-800), 480 = a touch heavier than regular
+  h1, p { font-family: $f-body; letter-spacing: normal; }
+  h1 { font-size: 20px; font-weight: 600; letter-spacing: 0.06em; }
+  p { font-size: 17px; font-weight: 400; }   // Inter's large x-height reads like Garamond at 20px
 }
 // Small italic note at the end of a page (e.g. the About disclaimer).
 .front-page p.disclaimer {
   margin-top: 2em;
-  font-size: 17px;
+  font-size: 15px;
   font-style: italic;
-  font-weight: 400;   // the italic is loaded at 400 only
+  font-weight: 400;
   line-height: 1.5;
 }
 // About photo floats right; the heading and text wrap around its left side.
