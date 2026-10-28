@@ -16,6 +16,14 @@
   .foot span{margin-left:auto}
   .status{font-size:13px;color:var(--accent);font-style:italic;margin:8px 0 0;min-height:1em}
   .status.sample{color:var(--mute)}
+  .hist{margin:6px 0}
+  .hist .cols{display:flex;align-items:flex-end;gap:2px;height:54px}
+  .hist .col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
+  .hist .col i{display:block;width:100%;background:#444}
+  .hist .n{font-size:10px;color:var(--mute);line-height:1.3}
+  .hist .xax{display:flex;gap:2px;border-top:1px solid #ccc;padding-top:2px;font-size:10px;color:var(--mute)}
+  .hist .xax span{flex:1}
+  .hist .xcap{font-size:10px;color:var(--mute);text-align:right;margin-top:1px}
   .hint{font-size:13px;color:var(--mute);font-style:italic;margin:-4px 0 14px}
 
   /* 1 · paste */
@@ -208,8 +216,11 @@ go.onclick = async () => {
 // ---------- helpers ----------
 const esc = s => s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 const CLS = {weak:'weak', ly:'adv', zombie:'zom', filler:'risk'};
-function hist(vals,bins,hi){const c=Array(bins).fill(0);vals.forEach(v=>c[Math.min(bins-1,Math.floor(v/hi*bins))]++);const m=Math.max(...c),w=100/bins;
-  return `<svg viewBox="0 0 100 46" preserveAspectRatio="none">${c.map((k,i)=>`<rect x="${i*w+.4}" y="${46-k/m*44}" width="${w-.8}" height="${k/m*44}" fill="#444"/>`).join('')}</svg>`;}
+function hist(vals){ // bars = sentences per length band; numbers on top, band starts below
+  const hi=Math.max(...vals,1), step=hi>60?10:5, bins=Math.floor(hi/step)+1, c=Array(bins).fill(0);
+  vals.forEach(v=>c[Math.floor(v/step)]++); const m=Math.max(...c,1);
+  return `<div class="hist"><div class="cols">${c.map(k=>`<div class="col"><span class="n">${k||''}</span><i style="height:${k/m*40}px"></i></div>`).join('')}</div>`+
+    `<div class="xax">${c.map((_,i)=>`<span>${i%2?'':i*step}</span>`).join('')}</div><div class="xcap">words per sentence, ${step}-word bands →</div></div>`;}
 function bullets(rows,unit=''){ // rows: [label, value, axis max] → label, tick on a track, number
   return `<div class="minib">${rows.map(([l,v,mx])=>v==null?`<span>${l}</span><span class="track"></span><span class="num">N/A</span>`:
     `<span>${l}</span><span class="track"><span class="val" style="left:${Math.min(v/mx,1)*100}%"></span></span><span class="num">${v.toFixed(unit?1:2)}${unit}</span>`).join('')}</div>`;}
@@ -263,8 +274,8 @@ function render(data){
        ['Zombie nouns',`Nouns made from verbs or adjectives (-tion, -ment, -ness…), which hide the action. Shaded in the text. ${list(TA.zombies)}.`],
        ['Adverbs, -ly',`Adverbs ending in -ly. Dotted in the text. ${list(TA.ly_words)}.`]])}
        <p class="note">N/A means the second word type never appears, so the ratio can’t be computed.</p>`},
-    {label:'Sentence rhythm', big:RH.mean.toFixed(1), unit:`words avg · σ ${RH.sd.toFixed(1)}`, chart:hist(RH.lengths,12,Math.max(...RH.lengths,1)),
-     cap:'Lit: sentences over 35 words.', hit:x=>x.words>35,
+    {label:'Sentence rhythm', big:RH.mean.toFixed(1), unit:`words avg · σ ${RH.sd.toFixed(1)}`, chart:hist(RH.lengths),
+     cap:'Number above each bar = sentences of that length. Lit: sentences over 35 words.', hit:x=>x.words>35,
      detail:()=>`<h3>Sentence rhythm · definitions</h3>${defs([
        ['Average length',`Words per sentence. Median: ${RH.median}.`],
        ['Standard deviation','How much sentence lengths vary. Low = even, metronomic; high = long sentences broken by short ones.']])}`},
