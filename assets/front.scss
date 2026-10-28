@@ -178,48 +178,9 @@ $still-max-h: 640px;
   }
 }
 
-// Personal Projects list: one row per project, a shape beside a text box.
-// Shapes are clipped squares (the ring is a hollow circle); colours are the current
-// still colour and three variations.
-.project-row {
-  display: flex;
-  align-items: center;
-  gap: 32px;
-  padding: 16px 0;
-  text-decoration: none;
-}
-.front-page p.project-text { flex: 1; margin: 0; font-size: 16px; }   // 80% of the page's 20px body text
+// Personal Projects: the project description under the metro map.
+.front-page p.project-text { margin: 0; font-size: 16px; }   // 80% of the page's 20px body text
 .project-name { text-transform: uppercase; letter-spacing: 0.04em; }
-.project-shape {
-  flex: none;
-  width: 120px;
-  aspect-ratio: 1;
-  // Tones set `color`; the shape is painted in currentColor (the ring uses it for its shadow).
-  color: var(--still-color, #{$f-muted});
-  background: currentColor;
-  // Every shape is a 4-point polygon (triangles repeat their apex) so it can animate
-  // into the square on hover; the circle and ring animate their border-radius instead.
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-  transition: clip-path 0.3s ease, border-radius 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
-  &.shape--circle   { border-radius: 50%; }
-  // Ring: a hollow circle drawn with an inset shadow; on hover the shadow spreads to fill it.
-  &.shape--ring {
-    border-radius: 50%;
-    background: transparent;
-    box-shadow: inset 0 0 0 22px currentColor;
-  }
-  &.shape--diamond  { clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
-  &.shape--tri-up   { clip-path: polygon(50% 0, 50% 0, 100% 100%, 0 100%); }
-  &.shape--tri-down { clip-path: polygon(0 0, 100% 0, 50% 100%, 50% 100%); }
-  .project-row:hover & {
-    border-radius: 0;
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-  }
-  .project-row:hover &.shape--ring { box-shadow: inset 0 0 0 100px currentColor; }
-  &.tone--dark  { color: color-mix(in oklab, var(--still-color, #{$f-muted}), black 20%); }
-  &.tone--light { color: color-mix(in oklab, var(--still-color, #{$f-muted}), white 30%); }
-  &.tone--warm  { color: color-mix(in oklab, var(--still-color, #{$f-muted}), #e8823a 25%); }
-}
 // ---- Small screens: stack the menu above the content ----
 @media (max-width: 767px) {
   .front-side,
@@ -235,7 +196,5 @@ $still-max-h: 640px;
   .still--portrait { display: block; }
   .still--portrait figcaption { margin-top: 20px; }
   .front--pinned .front-page h1 { position: static; margin: 0 0 24px; padding: 0; }
-  .project-row { gap: 20px; }
-  .project-shape { width: 80px; }
   .about-photo { float: none; margin: 0 0 28px; }   // no text wrap on phones: too narrow beside the photo
 }

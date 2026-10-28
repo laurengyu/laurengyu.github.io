@@ -6,31 +6,180 @@ body_class: front--pinned
 <article class="front-page">
   <h1>{{ page.title | escape }}</h1>
   {%- comment -%}
-    One row per project: a shape beside a text box. Shape and colour are picked at
-    random on each load by the script below. The text is placeholder for now.
+    Projects as a metro map. Each theme is a line, each project a station, and
+    the centre is the interchange where every line meets. Lines run at 0°/45°/90° only,
+    as on a transit diagram. Stations are ticks off the line and each line ends in a
+    terminus bar, as on the London Tube map. Hovering a station or a legend row picks its
+    line out and fades the rest. Line colours are the still colour pulled toward three
+    hues, so they stay distinct but shift with the front page's still.
   {%- endcomment %}
-  <div class="project-list">
-    <a class="project-row" href="{{ '/projects/writing-analyzer/' | relative_url }}" target="_blank" rel="noopener">
-      <span class="project-shape"></span>
-      <p class="project-text"><strong class="project-name">Writing Analyzer.</strong> What if your prose had a dashboard? Paste in a paragraph and watch it break down into numbers: sentence-length variance, verb-to-noun ratios, zombie nouns, adverb load, the rhythm of how your sentences open and close. It’s A/B testing for your drafts. Revise, re-run, and see exactly what moved.</p>
-    </a>
-    {%- for i in (2..6) %}
-    <div class="project-row">
-      <span class="project-shape"></span>
-      <p class="project-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    </div>
-    {%- endfor %}
+  <svg class="metro" viewBox="0 0 760 500" role="img" aria-label="Projects drawn as a metro map, one line per theme">
+    <!-- Health line -->
+    <g class="metro-route line--health" data-line="health">
+      <path class="metro-line" d="M380 250 H260 L200 190 V140"/>
+      <path class="metro-line metro-line--wip" d="M200 140 V80"/>
+      <rect class="metro-terminus" x="186" y="76" width="28" height="8"/>
+      <g class="metro-badge" transform="translate(200 50)"><circle r="15"/><text y="6">H</text></g>
+      <text class="metro-linename" x="262" y="278">Health</text>
+      <g class="metro-station" data-id="health" tabindex="0" transform="translate(200 165)">
+        <rect class="metro-hit" x="-230" y="-18" width="240" height="36"/>
+        <rect class="metro-tick" x="-17" y="-3.5" width="13" height="7"/>
+        <text class="metro-label" x="-24" y="7" text-anchor="end">Weekly Health Debrief</text>
+      </g>
+      <g class="metro-station metro-station--wip" data-id="skincare" tabindex="0" transform="translate(200 112)">
+        <rect class="metro-hit" x="-250" y="-18" width="260" height="36"/>
+        <rect class="metro-tick" x="-17" y="-3.5" width="13" height="7"/>
+        <text class="metro-label" x="-24" y="7" text-anchor="end">Skincare Routine Builder</text>
+      </g>
+    </g>
+
+    <!-- Productivity line -->
+    <g class="metro-route line--prod" data-line="prod">
+      <path class="metro-line" d="M380 250 L470 160 H660"/>
+      <rect class="metro-terminus" x="656" y="146" width="8" height="28"/>
+      <g class="metro-badge" transform="translate(692 160)"><circle r="15"/><text y="6">P</text></g>
+      <text class="metro-linename" x="490" y="188">Productivity</text>
+      <g class="metro-station" data-id="attention" tabindex="0" transform="translate(600 160)">
+        <rect class="metro-hit" x="-80" y="-48" width="160" height="58"/>
+        <rect class="metro-tick" x="-3.5" y="-17" width="7" height="13"/>
+        <text class="metro-label" y="-26" text-anchor="middle">Attention Filter</text>
+      </g>
+    </g>
+
+    <!-- Creativity & Learning line -->
+    <g class="metro-route line--create" data-line="create">
+      <path class="metro-line" d="M380 250 V330 L450 400 H640"/>
+      <rect class="metro-terminus" x="636" y="386" width="8" height="28"/>
+      <g class="metro-badge" transform="translate(672 400)"><circle r="15"/><text y="6">C</text></g>
+      <text class="metro-linename" x="450" y="430">Creativity &amp; Learning</text>
+      <a href="{{ '/projects/writing-analyzer/' | relative_url }}" target="_blank" rel="noopener">
+        <g class="metro-station" data-id="writing" transform="translate(580 400)">
+          <rect class="metro-hit" x="-85" y="-48" width="170" height="58"/>
+          <rect class="metro-tick" x="-3.5" y="-17" width="7" height="13"/>
+          <text class="metro-label" y="-26" text-anchor="middle">Writing Analyzer</text>
+        </g>
+      </a>
+    </g>
+
+    <!-- interchange: drawn last so it sits on top of every line -->
+    <g transform="translate(380 250)">
+      <rect class="metro-interchange" x="-21" y="-21" width="42" height="42" rx="21"/>
+      <text class="metro-emoji" y="10" text-anchor="middle">👩🏻‍💻</text>
+      <text class="metro-label" x="30" y="46">Lauren Yu</text>
+    </g>
+  </svg>
+
+  <!-- legend, as on the map in a carriage -->
+  <div class="metro-legend">
+    <ul class="metro-legend-lines">
+      <li class="line--health" data-line="health"><span class="metro-swatch"></span>Health Line</li>
+      <li class="line--prod" data-line="prod"><span class="metro-swatch"></span>Productivity Line</li>
+      <li class="line--create" data-line="create"><span class="metro-swatch"></span>Creativity &amp; Learning Line</li>
+    </ul>
+    <ul class="metro-legend-key">
+      <li><svg viewBox="0 0 40 20" aria-hidden="true"><rect x="0" y="12" width="40" height="7" fill="#000"/><rect x="16.5" y="1" width="7" height="11" fill="#000"/></svg>Project</li>
+      <li><svg viewBox="0 0 40 20" aria-hidden="true"><path d="M2 15 H38" stroke="#6b6b6b" stroke-width="7" stroke-dasharray="2 8" stroke-linecap="round"/></svg>Under construction</li>
+      <li><svg viewBox="0 0 40 20" aria-hidden="true"><path d="M4 10 H36" stroke="#000" stroke-width="7"/><rect x="34" y="1" width="6" height="18" fill="#000"/></svg>End of line</li>
+    </ul>
   </div>
+
+  <p class="project-text metro-info" aria-live="polite">Hover over a station to read about a project.</p>
+
+  <style>
+    .metro { width: 100%; height: auto; display: block; overflow: visible; margin: 8px 0 16px; }
+    /* Line colours: three hues spaced around the wheel (red, blue, green), each tinted
+       20% with the still colour so they sit with the page without blurring together. */
+    .front-page {
+      --line-health: color-mix(in oklab, var(--still-color, #6b6b6b), #d23c2c 80%);
+      --line-prod:   color-mix(in oklab, var(--still-color, #6b6b6b), #1f5fbf 80%);
+      --line-create: color-mix(in oklab, var(--still-color, #6b6b6b), #2e9a4e 80%);
+    }
+    .line--health { color: var(--line-health); }
+    .line--prod   { color: var(--line-prod); }
+    .line--create { color: var(--line-create); }
+
+    .metro-route { transition: opacity 0.3s ease; }
+    .metro.has-focus .metro-route:not(.is-focus) { opacity: 0.18; }
+    .metro-line { fill: none; stroke: currentColor; stroke-width: 9; stroke-linejoin: round; }
+    .metro-line--wip { stroke-dasharray: 3 12; stroke-linecap: round; }
+    .metro-terminus, .metro-tick { fill: currentColor; }
+    .metro-badge circle { fill: currentColor; }
+    .metro-badge text {
+      font-family: "EB Garamond", Garamond, serif; font-size: 18px; font-weight: 600;
+      fill: #fff; text-anchor: middle;
+    }
+    .metro-label { font-family: "EB Garamond", Garamond, serif; font-size: 23px; fill: #000; transition: fill 0.3s ease; }
+    .metro-linename {
+      font-family: "EB Garamond", Garamond, serif; font-size: 15px;
+      letter-spacing: 0.08em; text-transform: uppercase; fill: #6b6b6b;
+    }
+    .metro-station { cursor: pointer; outline: none; }
+    .metro-hit { fill: transparent; }
+    .metro-tick { transition: transform 0.3s ease; transform-box: fill-box; }
+    .metro-station:hover .metro-label, .metro-station:focus .metro-label, .metro-station.is-on .metro-label { fill: currentColor; }
+    .metro-station:hover .metro-tick, .metro-station:focus .metro-tick, .metro-station.is-on .metro-tick { transform: scale(1.6); }
+    .metro-station--wip .metro-tick { fill: #fff; stroke: currentColor; stroke-width: 2; }
+    .metro-station--wip .metro-label { fill: #6b6b6b; }
+    .metro-interchange { fill: #fff; stroke: #000; stroke-width: 3.5; }
+    .metro-emoji { font-size: 26px; font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
+
+    .metro-legend {
+      display: inline-flex; flex-wrap: wrap; gap: 6px 28px;
+      border: 1.5px solid #000; padding: 8px 12px; margin: 0 0 24px;
+      font-family: "EB Garamond", Garamond, serif; font-size: 14px; line-height: 1.2;
+    }
+    .metro-legend ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; }
+    .metro-legend li { display: flex; align-items: center; gap: 8px; }
+    .metro-legend-lines li { cursor: default; }
+    .metro-legend-lines li span ~ * { color: #000; }
+    .metro-swatch { width: 26px; height: 5px; background: currentColor; flex: none; }
+    .metro-legend-lines li { color: #000; }
+    .metro-legend-lines .line--health .metro-swatch { background: var(--line-health); }
+    .metro-legend-lines .line--prod .metro-swatch   { background: var(--line-prod); }
+    .metro-legend-lines .line--create .metro-swatch { background: var(--line-create); }
+    .metro-legend-key svg { width: 26px; height: 13px; flex: none; }
+    .front-page p.metro-info { min-height: 5em; }
+  </style>
   <script>
     (function () {
-      var shapes = ["circle", "ring", "diamond", "tri-up", "tri-down"];
-      var tones = ["base", "dark", "light", "warm"];
-      function pick(list) { return list[Math.floor(Math.random() * list.length)]; }
-      document.querySelectorAll(".project-shape").forEach(function (el) {
-        el.className += " shape--" + pick(shapes) + " tone--" + pick(tones);
-        // The project name takes the same colour as its shape.
-        var name = el.parentNode.querySelector(".project-name");
-        if (name) name.style.color = getComputedStyle(el).color;
+      var projects = {
+        health: ["Weekly Google Health Debrief", "A personal data pipeline that pulls weekly health and lifestyle metrics into a Google Sheet, and sends me a report in Slack."],
+        skincare: ["Skincare Routine Builder", "Under construction. Description coming soon."],
+        attention: ["Attention Filter", "A Chrome extension that hides distracting UI elements on frequently-visited sites. No tracking, no network requests, no dependencies — just static CSS rules and lightweight DOM filtering."],
+        writing: ["Writing Analyzer", "What if your prose had a dashboard? Paste in a paragraph and watch it break down into numbers: sentence-length variance, verb-to-noun ratios, zombie nouns, adverb load. Click to open."]
+      };
+      var map = document.querySelector(".metro");
+      var info = document.querySelector(".metro-info");
+
+      // Pick one line out: every other route fades (see .has-focus in the styles).
+      function focusLine(line) {
+        map.classList.toggle("has-focus", !!line);
+        map.querySelectorAll(".metro-route").forEach(function (r) {
+          r.classList.toggle("is-focus", r.dataset.line === line);
+        });
+      }
+
+      map.querySelectorAll(".metro-station").forEach(function (el) {
+        var line = el.closest(".metro-route").dataset.line;
+        function show() {
+          map.querySelectorAll(".metro-station.is-on").forEach(function (o) { o.classList.remove("is-on"); });
+          el.classList.add("is-on");
+          focusLine(line);
+          var p = projects[el.dataset.id];
+          info.innerHTML = '<strong class="project-name"></strong> ';
+          info.firstChild.textContent = p[0] + ".";
+          info.firstChild.style.color = getComputedStyle(el).color;
+          info.appendChild(document.createTextNode(p[1]));
+        }
+        el.addEventListener("mouseenter", show);
+        el.addEventListener("focus", show);
+        el.addEventListener("click", show);
+        el.addEventListener("mouseleave", function () { focusLine(null); });
+      });
+
+      document.querySelectorAll(".metro-legend-lines li").forEach(function (li) {
+        li.addEventListener("mouseenter", function () { focusLine(li.dataset.line); });
+        li.addEventListener("mouseleave", function () { focusLine(null); });
       });
     })();
   </script>
