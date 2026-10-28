@@ -3,6 +3,20 @@ layout: front
 title: "Design Studio"
 redirect_from: /remix/
 body_class: front--pinned
+# Criterion Collection posters, newest first: add each new one at the top. Add `image: /assets/design/<file>.jpg` to swap a grey placeholder for the real poster.
+posters:
+  - title: "Mr. Skeffington"
+    film: "Vincent Sherman, 1944, USA"
+    image: /assets/design/mr-skeffington.jpg
+    description: "Honestly, I watched it for Bette Davis, and she is divine: a vain, dazzling beauty who collects suitors, marries for convenience and then has to live without her looks. Davis plays it fearlessly, from ringlets to ruin. The erased eyes on the cover nod to the ending, where only a man who can no longer see still finds her beautiful."
+  - title: "Senso"
+    film: "Luchino Visconti, 1954, Italy"
+    image: /assets/design/senso.jpg
+    description: "Not my favourite film, but a ravishing one to look at. A countess betrays everything for an Austrian officer in 1866 Venice, and Visconti films it like grand opera: Technicolor saturated to the point of painting, every frame lavish, operatic and very Visconti. The cover pairs a still with Hayez’s <em>The Kiss</em>, painted just seven years before the story takes place."
+  - title: "The Lodger: A Story of the London Fog"
+    film: "Alfred Hitchcock, 1927, UK"
+    image: /assets/design/the-lodger.jpg
+    description: "For me, this is the first true Hitchcock film. A silent thriller about a mysterious stranger suspected of being a serial killer, it is strikingly stylish, all fog, shadow and expressionist angles, and it already holds the themes he would return to for the rest of his career: the wrongly accused man, the icy blonde in danger, guilt passed from one character to another, and an audience made complicit in suspicion."
 ---
 <article class="front-page">
   <h1>{{ page.title | escape }}</h1>
@@ -10,9 +24,16 @@ body_class: front--pinned
   <details class="studio-group">
     <summary>Criterion Collection</summary>
     <div class="studio-body">
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
-      <p>Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur? At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.</p>
+      <p class="studio-intro">I’ve long admired the Criterion Collection’s cover art. When a film I love feels like it belongs in the collection, I design a cover for it myself: part remix, part reinterpretation.</p>
+      <ul class="poster-row">
+        {%- for poster in page.posters %}
+        <li>
+          <button class="poster-thumb" type="button" data-index="{{ forloop.index0 }}" aria-label="Open {{ poster.title | escape }}">
+            {%- if poster.image %}<img src="{{ poster.image | relative_url }}" alt="">{% else %}<span class="poster-ph"></span>{% endif -%}
+          </button>
+        </li>
+        {%- endfor %}
+      </ul>
     </div>
   </details>
 
@@ -26,6 +47,22 @@ body_class: front--pinned
     <div class="studio-body"><p class="front-note">Coming soon.</p></div>
   </details>
 </article>
+
+{%- comment -%} One detail view per poster: the image on the left, its notes in the blank space on the right. {%- endcomment %}
+{%- for poster in page.posters %}
+<dialog class="poster-view" id="poster-{{ forloop.index0 }}" aria-label="{{ poster.title | escape }}">
+  <button class="poster-close" type="button" aria-label="Close">&times;</button>
+  <div class="poster-full">
+    {%- if poster.image %}<img src="{{ poster.image | relative_url }}" alt="{{ poster.title | escape }}">{% else %}<span class="poster-ph"></span>{% endif -%}
+  </div>
+  <div class="poster-text">
+    <p class="poster-count">{{ forloop.index }} / {{ forloop.length }}</p>
+    <h2>{{ poster.title | escape }}</h2>
+    <p class="poster-film">{{ poster.film | escape }}</p>
+    <p>{{ poster.description }}</p>
+  </div>
+</dialog>
+{%- endfor %}
 
 <script>
   // Smooth open/close: animate the body's height, and on close only drop `open` once it has folded away.
@@ -52,4 +89,32 @@ body_class: front--pinned
       });
     });
   })();
+
+  // Poster thumbnails open their detail view; the ×, Esc or a click on the backdrop closes it.
+  document.querySelectorAll(".poster-thumb").forEach(function (thumb) {
+    thumb.addEventListener("click", function () { document.getElementById("poster-" + thumb.dataset.index).showModal(); });
+  });
+  // Swipe left/right (or the arrow keys) moves to the next or previous poster; it stops at either end.
+  var views = Array.prototype.slice.call(document.querySelectorAll(".poster-view"));
+  function step(view, by) {
+    var next = views[views.indexOf(view) + by];
+    if (!next) return;
+    view.close();
+    next.showModal();
+    next.scrollTop = 0;
+  }
+  views.forEach(function (view) {
+    view.querySelector(".poster-close").addEventListener("click", function () { view.close(); });
+    view.addEventListener("click", function (e) { if (e.target === view) view.close(); });
+    view.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowRight") step(view, 1);
+      if (e.key === "ArrowLeft") step(view, -1);
+    });
+    var x0, y0;
+    view.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+    view.addEventListener("touchend", function (e) {
+      var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) step(view, dx < 0 ? 1 : -1);   // mostly sideways: not a scroll
+    });
+  });
 </script>

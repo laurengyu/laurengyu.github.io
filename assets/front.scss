@@ -204,6 +204,77 @@ $still-max-h: 640px;
 .studio-body > :first-child { margin-top: 0; }
 .studio-body > :last-child { margin-bottom: 0; padding-bottom: 24px; }
 .studio-group.is-closing summary::after { content: "+"; }   // flip the sign as soon as closing starts
+// A line of context under a category title, above its work.
+.front-page p.studio-intro { margin: 0 0 20px; font-size: 15px; line-height: 1.5; color: $f-muted; }
+
+// Criterion Collection: a row of poster thumbnails (2:3), each opening a detail view.
+.poster-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin: 0 0 24px;
+  padding: 0;
+  list-style: none;
+}
+.poster-thumb {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+  transition: transform 0.25s ease;
+  &:hover { transform: translateY(-3px); }
+  img { display: block; width: 100%; }
+}
+.poster-ph { display: block; aspect-ratio: 2 / 3; background: #d9d9d9; }
+
+// Detail view: fills the space right of the menu and below the name; poster left, notes right.
+$poster-top: $f-top - 44px;   // just under the name, so "Lauren Y." stays whole
+.poster-view {
+  position: fixed;
+  inset: $poster-top 0 0 $f-side;
+  width: auto;
+  max-width: none;
+  height: auto;
+  max-height: none;
+  margin: 0;
+  padding: 44px $f-pad $f-pad 0;
+  border: 0;
+  background: $f-bg;
+  color: $f-text;
+  font-family: $f-body;
+  &[open] { display: flex; gap: 48px; align-items: flex-start; }
+  &::backdrop { background: transparent; }
+  .poster-full { flex: none; }
+  // Poster fits the window height (2:3), never wider than 420px.
+  .poster-full img, .poster-full .poster-ph {
+    display: block;
+    height: calc(100vh - #{$poster-top} - 44px - #{$f-pad});
+    max-height: 630px;
+    width: auto;
+    aspect-ratio: 2 / 3;
+    object-fit: contain;
+  }
+  .poster-text { flex: 0 1 320px; }
+  h2 { margin: 0 0 6px; font-size: 20px; font-weight: 600; }
+  p { margin: 0 0 16px; font-size: 16px; line-height: 1.5; }
+  .poster-film { color: $f-muted; }
+  .poster-count { margin-bottom: 12px; font-size: 13px; letter-spacing: 0.06em; color: $f-muted; }   // hints there are more to swipe through
+}
+.poster-close {
+  position: absolute;
+  top: 0;
+  right: $f-pad;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: 300 32px/1 $f-body;
+  cursor: pointer;
+  &:hover { color: var(--still-color, #{$f-muted}); }
+}
+
 // ---- Small screens: stack the menu above the content ----
 @media (max-width: 767px) {
   .front-side,
@@ -220,4 +291,10 @@ $still-max-h: 640px;
   .still--portrait figcaption { margin-top: 20px; }
   .front--pinned .front-page h1 { position: static; margin: 0 0 24px; padding: 0; }
   .about-photo { float: none; margin: 0 0 28px; }   // no text wrap on phones: too narrow beside the photo
+  .poster-row { grid-template-columns: repeat(2, 1fr); }   // 2 x 2 on phones: four across would be stamp-sized
+  .poster-view { inset: 0; padding: 64px 20px 40px; overflow-y: auto; }
+  .poster-view[open] { display: block; }   // stacked: poster, then notes underneath
+  .poster-view .poster-full { margin-bottom: 24px; }
+  .poster-view .poster-full img, .poster-view .poster-full .poster-ph { width: 100%; height: auto; }
+  .poster-close { top: 20px; right: 20px; }
 }
