@@ -126,7 +126,7 @@ $still-max-h: 640px;
 
 // About and section pages: readable text column.
 .front-page {
-  max-width: 640px;
+  max-width: 736px;   // 640px + 15%
   font-size: 16px;
   line-height: 1.5;
   h1 {
