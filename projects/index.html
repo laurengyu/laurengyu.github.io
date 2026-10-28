@@ -14,13 +14,13 @@ body_class: front--pinned
     hues, so they stay distinct but shift with the front page's still.
   {%- endcomment %}
   <svg class="metro" viewBox="0 0 760 500" role="img" aria-label="Projects drawn as a metro map, one line per theme">
-    <!-- Health line -->
+    <!-- Wellness line -->
     <g class="metro-route line--health" data-line="health">
       <path class="metro-line" d="M380 250 H260 L200 190 V140"/>
       <path class="metro-line metro-line--wip" d="M200 140 V80"/>
       <rect class="metro-terminus" x="186" y="76" width="28" height="8"/>
-      <g class="metro-badge" transform="translate(200 50)"><circle r="15"/><text y="6">H</text></g>
-      <text class="metro-linename" x="262" y="278">Health</text>
+      <g class="metro-badge" transform="translate(200 50)"><circle r="15"/><text y="6">W</text></g>
+      <text class="metro-linename" x="262" y="278">Wellness</text>
       <g class="metro-station" data-id="health" tabindex="0" transform="translate(200 165)">
         <rect class="metro-hit" x="-230" y="-18" width="240" height="36"/>
         <rect class="metro-tick" x="-17" y="-3.5" width="13" height="7"/>
@@ -46,12 +46,12 @@ body_class: front--pinned
       </g>
     </g>
 
-    <!-- Creativity & Learning line -->
+    <!-- Studio line -->
     <g class="metro-route line--create" data-line="create">
       <path class="metro-line" d="M380 250 V330 L450 400 H640"/>
       <rect class="metro-terminus" x="636" y="386" width="8" height="28"/>
-      <g class="metro-badge" transform="translate(672 400)"><circle r="15"/><text y="6">C</text></g>
-      <text class="metro-linename" x="450" y="430">Creativity &amp; Learning</text>
+      <g class="metro-badge" transform="translate(672 400)"><circle r="15"/><text y="6">S</text></g>
+      <text class="metro-linename" x="450" y="430">Studio</text>
       <a href="{{ '/projects/writing-analyzer/' | relative_url }}" target="_blank" rel="noopener">
         <g class="metro-station" data-id="writing" transform="translate(580 400)">
           <rect class="metro-hit" x="-85" y="-48" width="170" height="58"/>
@@ -72,9 +72,9 @@ body_class: front--pinned
   <!-- legend, as on the map in a carriage -->
   <div class="metro-legend">
     <ul class="metro-legend-lines">
-      <li class="line--health" data-line="health"><span class="metro-swatch"></span>Health Line</li>
+      <li class="line--health" data-line="health"><span class="metro-swatch"></span>Wellness Line</li>
       <li class="line--prod" data-line="prod"><span class="metro-swatch"></span>Productivity Line</li>
-      <li class="line--create" data-line="create"><span class="metro-swatch"></span>Creativity &amp; Learning Line</li>
+      <li class="line--create" data-line="create"><span class="metro-swatch"></span>Studio Line</li>
     </ul>
     <ul class="metro-legend-key">
       <li><svg viewBox="0 0 40 20" aria-hidden="true"><rect x="0" y="12" width="40" height="7" fill="#000"/><rect x="16.5" y="1" width="7" height="11" fill="#000"/></svg>Project</li>
@@ -116,6 +116,7 @@ body_class: front--pinned
     .metro-station { cursor: pointer; outline: none; }
     .metro-hit { fill: transparent; }
     .metro-tick { transition: transform 0.3s ease; transform-box: fill-box; }
+    .metro a:hover { color: inherit; } /* keep the line colour; front.scss a:hover would recolour it */
     .metro-station:hover .metro-label, .metro-station:focus .metro-label, .metro-station.is-on .metro-label { fill: currentColor; }
     .metro-station:hover .metro-tick, .metro-station:focus .metro-tick, .metro-station.is-on .metro-tick { transform: scale(1.6); }
     .metro-station--wip .metro-tick { fill: #fff; stroke: currentColor; stroke-width: 2; }
@@ -124,20 +125,20 @@ body_class: front--pinned
     .metro-emoji { font-size: 26px; font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
 
     .metro-legend {
-      display: inline-flex; flex-wrap: wrap; gap: 6px 28px;
-      border: 1.5px solid #000; padding: 8px 12px; margin: 0 0 24px;
-      font-family: "Inter", Helvetica, sans-serif; font-size: 12.5px; line-height: 1.2;
+      display: inline-flex; flex-wrap: wrap; gap: 5px 24px;
+      border: 1.5px solid #000; padding: 7px 10px; margin: 0 0 24px;
+      font-family: "Inter", Helvetica, sans-serif; font-size: 10.6px; line-height: 1.2;
     }
     .metro-legend ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; }
-    .metro-legend li { display: flex; align-items: center; gap: 8px; }
+    .metro-legend li { display: flex; align-items: center; gap: 7px; }
     .metro-legend-lines li { cursor: default; }
     .metro-legend-lines li span ~ * { color: #000; }
-    .metro-swatch { width: 26px; height: 5px; background: currentColor; flex: none; }
+    .metro-swatch { width: 22px; height: 4px; background: currentColor; flex: none; }
     .metro-legend-lines li { color: #000; }
     .metro-legend-lines .line--health .metro-swatch { background: var(--line-health); }
     .metro-legend-lines .line--prod .metro-swatch   { background: var(--line-prod); }
     .metro-legend-lines .line--create .metro-swatch { background: var(--line-create); }
-    .metro-legend-key svg { width: 26px; height: 13px; flex: none; }
+    .metro-legend-key svg { width: 22px; height: 11px; flex: none; }
     .front-page p.metro-info { min-height: 5em; }
   </style>
   <script>
