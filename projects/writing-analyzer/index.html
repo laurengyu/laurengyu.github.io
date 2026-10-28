@@ -52,6 +52,13 @@
   .minib .num{text-align:right;color:var(--ink);font-variant-numeric:tabular-nums}
   .stats{display:grid;grid-template-columns:1fr auto;gap:4px 10px;font-size:13px;margin:8px 0 10px}
   .stats dt{color:#666} .stats dd{margin:0;text-align:right;color:var(--ink)}
+  .stats .grade{color:var(--mute);font-style:italic}
+  .stats .bench{grid-column:1/-1;margin:-2px 0 4px}
+  .bench .track{position:relative;height:6px;background:#eee}
+  .bench .track i{position:absolute;top:0;bottom:0}
+  .bench .nf{background:#ddd} .bench .fic{background:#bbb}
+  .bench .you{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--accent)}
+  .bench .ends{display:flex;justify-content:space-between;font-size:11px;color:var(--mute);font-style:italic;margin-top:3px}
   .defs{display:grid;grid-template-columns:190px 1fr;gap:8px 18px;font-size:13px;line-height:1.5;margin:14px 0 0}
   .defs dt{color:var(--ink)} .defs dd{margin:0;color:#555}
   .detail .bars{margin-top:12px}
@@ -224,7 +231,13 @@ function hist(vals){ // bars = sentences per length band; numbers on top, band s
 function bullets(rows,unit=''){ // rows: [label, value, axis max] → label, tick on a track, number
   return `<div class="minib">${rows.map(([l,v,mx])=>v==null?`<span>${l}</span><span class="track"></span><span class="num">N/A</span>`:
     `<span>${l}</span><span class="track"><span class="val" style="left:${Math.min(v/mx,1)*100}%"></span></span><span class="num">${v.toFixed(unit?1:2)}${unit}</span>`).join('')}</div>`;}
-const statList = rows => `<dl class="stats">${rows.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>`;
+const statList = rows => `<dl class="stats">${rows.map(([k,v,x])=>`<dt>${k}</dt><dd>${v}</dd>${x?`<dd class="bench">${x}</dd>`:''}`).join('')}</dl>`;
+const ordinal = n => n + (n%100>=11&&n%100<=13 ? 'th' : ['th','st','nd','rd'][n%10]||'th');
+// Grade from Flesch–Kincaid, so it agrees with the grade in Details.
+const gradeLabel = g => g<1 ? 'pre-school' : g>16 ? 'graduate' : g>12 ? 'college' : `${ordinal(g)} grade`;
+// Stubbs's survey of lexical density: fiction 40–54%, non-fiction 40–65%. Track runs 20–80%.
+const densityBench = d => { const x=v=>`${(Math.min(80,Math.max(20,v))-20)/60*100}%`;
+  return `<div class="track"><i class="nf" style="left:${x(40)};right:calc(100% - ${x(65)})"></i><i class="fic" style="left:${x(40)};right:calc(100% - ${x(54)})"></i><span class="you" style="left:${x(d)}"></span></div><div class="ends"><span>fiction 40–54</span><span>non-fiction 40–65</span></div>`; };
 const defs = rows => `<dl class="defs">${rows.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>`;
 const list = obj => Object.entries(obj).map(([w,c])=>`${esc(w)} ×${c}`).join(', ') || 'none';
 const total = obj => Object.values(obj).reduce((a,b)=>a+b,0);
@@ -257,11 +270,11 @@ function render(data){
   const cap = w => w.charAt(0).toUpperCase()+w.slice(1);
 
   cards=[
-    {label:'Summary', chart:statList([['Words',S.words.toLocaleString()],['Sentences',S.sentences],['Reading time',`${Math.max(1,Math.round(S.reading_time_min))} min`],['Lexical density',`${Math.round(S.lexical_density)}%`],['Flesch Reading Ease',Math.round(S.flesch_ease)]]),
+    {label:'Summary', chart:statList([['Words',S.words.toLocaleString()],['Sentences',S.sentences],['Reading time',`${Math.max(1,Math.round(S.reading_time_min))} min`],['Lexical density',`${Math.round(S.lexical_density)}%`,densityBench(S.lexical_density)],['Flesch Reading Ease',`${Math.round(S.flesch_ease)} <span class="grade">· ${gradeLabel(Math.round(S.flesch_grade))}</span>`]]),
      cap:'Words exclude punctuation.', hit:()=>false,
      detail:()=>`<h3>Summary · definitions</h3>${defs([
        ['Reading time','Words ÷ 250 words per minute, a typical adult silent-reading speed.'],
-       ['Lexical density','Share of words that carry content (nouns, verbs, adjectives, adverbs) rather than grammar.'],
+       ['Lexical density','Share of words that carry content (nouns, verbs, adjectives, adverbs) rather than grammar. In Michael Stubbs’s survey, fiction ran 40–54% and non-fiction 40–65%.'],
        ['Flesch Reading Ease',`206.835 − 1.015 × (words per sentence) − 84.6 × (syllables per word). Higher is easier to read. Syllables are estimated. Grade level: ${S.flesch_grade}.`]])}`},
     {label:'Word choice', chart:`<div class="sub">Ratios</div>${bullets([['Verb : noun',R.verb_noun,1.5],['Verb : manner adverb',R.verb_manner_adverb,9],['Noun : adjective',R.noun_adjective,5]])}<div class="sub">Share of all words</div>${bullets([['Be-verbs',SH.be_pct,8],['Prepositions',SH.prep_pct,20],['Zombie nouns',SH.zombie_pct,5],['Adverbs, -ly',SH.ly_pct,5]],'%')}`,
      cap:'Lit: sentences with two or more zombie nouns or -ly adverbs.', hit:x=>x.count('zombie')+x.count('ly')>1,

@@ -13,47 +13,53 @@ body_class: front--pinned
     line out and fades the rest. Line colours are the still colour pulled toward three
     hues, so they stay distinct but shift with the front page's still.
   {%- endcomment %}
-  <svg class="metro" viewBox="0 0 760 500" role="img" aria-label="Projects drawn as a metro map, one line per theme">
-    <!-- Wellness line -->
+  <svg class="metro" viewBox="0 0 760 460" role="img" aria-label="Projects drawn as a metro map, one line per theme">
+    <!-- Pinwheel: each line leaves the interchange, turns 45° then 90°, and runs out to its own side. -->
+    <!-- Wellness line: up, then east along the top -->
     <g class="metro-route line--health" data-line="health">
-      <path class="metro-line" d="M380 250 H260 L200 190 V140"/>
-      <path class="metro-line metro-line--wip" d="M200 140 V80"/>
-      <rect class="metro-terminus" x="186" y="76" width="28" height="8"/>
-      <g class="metro-badge" transform="translate(200 50)"><circle r="15"/><text y="6">W</text></g>
-      <text class="metro-linename" x="262" y="278">Wellness</text>
-      <g class="metro-station" data-id="health" tabindex="0" transform="translate(200 165)">
-        <rect class="metro-hit" x="-230" y="-18" width="240" height="36"/>
-        <rect class="metro-tick" x="-17" y="-3.5" width="13" height="7"/>
-        <text class="metro-label" x="-24" y="7" text-anchor="end">Weekly Health Debrief</text>
+      <path class="metro-line" d="M260 210 V90 L290 60 H515"/>
+      <path class="metro-line metro-line--wip" d="M515 60 H700"/>
+      <rect class="metro-terminus" x="696" y="46" width="8" height="28"/>
+      <g class="metro-badge" transform="translate(732 60)"><circle r="15"/><text y="6">W</text></g>
+      <text class="metro-linename" x="300" y="44">Wellness</text>
+      <g class="metro-station" data-id="health" tabindex="0" transform="translate(400 60)">
+        <rect class="metro-hit" x="-80" y="-10" width="160" height="82"/>
+        <rect class="metro-tick" x="-3.5" y="4" width="7" height="13"/>
+        <text class="metro-label" y="40" text-anchor="middle"><tspan x="0">Weekly Health</tspan><tspan x="0" dy="24">Debrief</tspan></text>
       </g>
-      <g class="metro-station metro-station--wip" data-id="skincare" tabindex="0" transform="translate(200 112)">
-        <rect class="metro-hit" x="-250" y="-18" width="260" height="36"/>
-        <rect class="metro-tick" x="-17" y="-3.5" width="13" height="7"/>
-        <text class="metro-label" x="-24" y="7" text-anchor="end">Skincare Routine Builder</text>
+      <g class="metro-station metro-station--wip" data-id="skincare" tabindex="0" transform="translate(630 60)">
+        <rect class="metro-hit" x="-90" y="-10" width="180" height="82"/>
+        <rect class="metro-tick" x="-3.5" y="4" width="7" height="13"/>
+        <text class="metro-label" y="40" text-anchor="middle"><tspan x="0">Skincare Routine</tspan><tspan x="0" dy="24">Builder</tspan></text>
       </g>
     </g>
 
-    <!-- Productivity line -->
+    <!-- Productivity line: east, then south down the right side -->
     <g class="metro-route line--prod" data-line="prod">
-      <path class="metro-line" d="M380 250 L470 160 H660"/>
-      <rect class="metro-terminus" x="656" y="146" width="8" height="28"/>
-      <g class="metro-badge" transform="translate(692 160)"><circle r="15"/><text y="6">P</text></g>
-      <text class="metro-linename" x="490" y="188">Productivity</text>
-      <g class="metro-station" data-id="attention" tabindex="0" transform="translate(600 160)">
-        <rect class="metro-hit" x="-80" y="-48" width="160" height="58"/>
+      <path class="metro-line" d="M260 210 H620 L650 240 V400"/>
+      <rect class="metro-terminus" x="636" y="396" width="28" height="8"/>
+      <g class="metro-badge" transform="translate(650 432)"><circle r="15"/><text y="6">P</text></g>
+      <text class="metro-linename" x="300" y="238">Productivity</text>
+      <g class="metro-station" data-id="attention" tabindex="0" transform="translate(440 210)">
+        <rect class="metro-hit" x="-85" y="-48" width="170" height="58"/>
         <rect class="metro-tick" x="-3.5" y="-17" width="7" height="13"/>
         <text class="metro-label" y="-26" text-anchor="middle">Attention Filter</text>
       </g>
+      <g class="metro-station" data-id="signal" tabindex="0" transform="translate(650 320)">
+        <rect class="metro-hit" x="-170" y="-18" width="180" height="36"/>
+        <rect class="metro-tick" x="-17" y="-3.5" width="13" height="7"/>
+        <text class="metro-label" x="-24" y="7" text-anchor="end">Signal Digest</text>
+      </g>
     </g>
 
-    <!-- Studio line -->
+    <!-- Studio line: south, then west along the bottom -->
     <g class="metro-route line--create" data-line="create">
-      <path class="metro-line" d="M380 250 V330 L450 400 H640"/>
-      <rect class="metro-terminus" x="636" y="386" width="8" height="28"/>
-      <g class="metro-badge" transform="translate(672 400)"><circle r="15"/><text y="6">S</text></g>
-      <text class="metro-linename" x="450" y="430">Studio</text>
+      <path class="metro-line" d="M260 210 V340 L230 370 H60"/>
+      <rect class="metro-terminus" x="56" y="356" width="8" height="28"/>
+      <g class="metro-badge" transform="translate(28 370)"><circle r="15"/><text y="6">S</text></g>
+      <text class="metro-linename" x="80" y="398">Studio</text>
       <a href="{{ '/projects/writing-analyzer/' | relative_url }}" target="_blank" rel="noopener">
-        <g class="metro-station" data-id="writing" transform="translate(580 400)">
+        <g class="metro-station" data-id="writing" transform="translate(140 370)">
           <rect class="metro-hit" x="-85" y="-48" width="170" height="58"/>
           <rect class="metro-tick" x="-3.5" y="-17" width="7" height="13"/>
           <text class="metro-label" y="-26" text-anchor="middle">Writing Analyzer</text>
@@ -62,10 +68,10 @@ body_class: front--pinned
     </g>
 
     <!-- interchange: drawn last so it sits on top of every line -->
-    <g transform="translate(380 250)">
+    <g transform="translate(260 210)">
       <rect class="metro-interchange" x="-21" y="-21" width="42" height="42" rx="21"/>
       <text class="metro-emoji" y="10" text-anchor="middle">👩🏻‍💻</text>
-      <text class="metro-label" x="30" y="46">Lauren Yu</text>
+      <text class="metro-label" x="-32" y="7" text-anchor="end">Lauren Yu</text>
     </g>
   </svg>
 
@@ -146,6 +152,7 @@ body_class: front--pinned
       var projects = {
         health: ["Weekly Google Health Debrief", "A personal data pipeline that pulls weekly health and lifestyle metrics into a Google Sheet, and sends me a report in Slack."],
         skincare: ["Skincare Routine Builder", "Under construction. Description coming soon."],
+        signal: ["Signal Digest", "A personal intelligence system that reads curated tech, crypto and AI sources, analyses them with Claude, and posts dense digests to Slack. Three pipelines, three questions: what happened, why it matters, and how people actually use AI tools."],
         attention: ["Attention Filter", "A Chrome extension that hides distracting UI elements on frequently-visited sites. No tracking, no network requests, no dependencies — just static CSS rules and lightweight DOM filtering."],
         writing: ["Writing Analyzer", "What if your prose had a dashboard? Paste in a paragraph and watch it break down into numbers: sentence-length variance, verb-to-noun ratios, zombie nouns, adverb load. Click to open."]
       };
