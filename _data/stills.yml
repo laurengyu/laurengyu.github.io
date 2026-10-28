@@ -29,3 +29,15 @@
   title: Sense and Sensibility
   credit: Ang Lee, 1995, UK / USA
   color: "#578947"
+- file: suspiria.jpg
+  title: Suspiria
+  credit: Dario Argento, 1977, Italy
+  color: "#912e38"
+- file: chinese-roulette.jpg
+  title: Chinese Roulette
+  credit: Rainer Werner Fassbinder, 1976, West Germany
+  color: "#6a5c30"
+- file: the-spy-who-came-in-from-the-cold.jpg
+  title: The Spy Who Came In from the Cold
+  credit: Martin Ritt, 1965, UK
+  color: "#6b6b6b"   # black-and-white film: no vivid colour, so the site's grey
