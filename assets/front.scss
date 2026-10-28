@@ -140,7 +140,7 @@ $still-max-h: 640px;
   }
   p { margin: 0 0 1em; }
 }
-// Heading and body on every front-layout text page (About, Personal Projects, Product & Data):
+// Heading and body on every front-layout text page (About, Side Builds, Product & Data):
 // Inter, a Helvetica-like sans that also reads as transit signage on the projects map.
 // The logo stays in EB Garamond. The Corner Shelf has its own stylesheet.
 .front-page {
@@ -180,7 +180,7 @@ $still-max-h: 640px;
   }
 }
 
-// Personal Projects: the project description under the metro map.
+// Side Builds: the project description under the metro map.
 .front-page p.project-text { margin: 0; font-size: 16px; }   // 80% of the page's 20px body text
 .project-name { text-transform: uppercase; letter-spacing: 0.04em; }
 // ---- Small screens: stack the menu above the content ----

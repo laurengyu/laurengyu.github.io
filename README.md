@@ -2,7 +2,7 @@
 
 Personal site on Jekyll + GitHub Pages. Two looks:
 
-- **Front page, About, section pages** (`/`, `/about/`, `/projects/`, `/product-data/`): `layout: front`, modelled on andreasgursky.com.
+- **Front page, About, section pages** (`/`, `/about/`, `/side-builds/`, `/product-data/`): `layout: front`, modelled on andreasgursky.com.
 - **The Corner Shelf** (`/shelf/…`): a reading blog by Helena L., migrated from helenalyndon-reads.tumblr.com, on Minima with a Tumblr-matching skin.
 
 ## Run locally
@@ -42,7 +42,7 @@ Open http://localhost:4000. Edits rebuild automatically, except `_config.yml` (r
 - **Menu**: `front_menu` in `_config.yml`.
 - **Icons**: SoundCloud / GitHub / Email links are `social` in `_config.yml`. Icon SVGs live in `_includes/icons/` (SoundCloud/GitHub from Simple Icons).
 - **About**: edit `about.html` (intro text, then a small italic disclaimer); photo is `assets/about/lauren.jpg`.
-- **Personal Projects / Product & Data**: "Coming soon" pages in `projects/` and `product-data/`.
+- **Side Builds / Product & Data**: "Coming soon" pages in `side-builds/` and `product-data/`.
 - Styles: `assets/front.scss` (Archivo Narrow from Google Fonts).
 
 ## Corner Shelf cover image

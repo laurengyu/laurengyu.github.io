@@ -1,0 +1,387 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" href="/assets/favicon/favicon.svg" type="image/svg+xml">
+<title>Writing Analyzer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..700&display=swap" rel="stylesheet">
+<style>
+  :root{--paper:#fffff8;--ink:#222;--mute:#999;--line:#ddd;--accent:#ad3627;--tint:#f6e3df}
+  body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 Georgia,serif}
+  .page{max-width:1160px;margin:0 auto;padding:48px 40px 120px}
+  h1{font-family:"Bodoni Moda",Georgia,serif;font-weight:400;font-size:41px;margin:0}  /* 34px + 20% */
+  .kicker{color:var(--mute);font-style:italic;margin:4px 0 6px}
+  .step{font-size:15.6px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin:48px 0 10px}  /* 12px + 30% */
+  .foot{margin-top:96px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--mute);display:flex;gap:24px;flex-wrap:wrap}
+  .foot a{color:var(--mute);text-decoration:none;border-bottom:1px solid var(--line)}
+  .foot a:hover{color:var(--accent);border-color:#e2b8b1}
+  .foot span{margin-left:auto}
+  .status{font-size:13px;color:var(--accent);font-style:italic;margin:8px 0 0;min-height:1em}
+  .status.sample{color:var(--mute)}
+  .hist{margin:6px 0}
+  .hist .cols{display:flex;align-items:flex-end;gap:2px;height:54px}
+  .hist .col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end}
+  .hist .col i{display:block;width:100%;background:#444}
+  .hist .n{font-size:10px;color:var(--mute);line-height:1.3}
+  .hist .xax{display:flex;gap:2px;border-top:1px solid #ccc;padding-top:2px;font-size:10px;color:var(--mute)}
+  .hist .xax span{flex:1}
+  .hist .xcap{font-size:10px;color:var(--mute);text-align:right;margin-top:1px}
+  .hint{font-size:13px;color:var(--mute);font-style:italic;margin:-4px 0 14px}
+
+  /* 1 · paste */
+  .paste{display:grid;grid-template-columns:62% 1fr;gap:40px}
+  textarea{width:100%;height:235px;box-sizing:border-box;border:1px solid var(--line);background:#fff;font:14px/1.5 Georgia,serif;padding:12px;resize:vertical;color:#555}
+  .count{font-size:13px;color:var(--mute);text-align:right;margin-top:4px}
+  .count.near{color:var(--accent)} .count.over{color:var(--accent);font-weight:700}
+  button.go{margin-top:6px;font:15px Georgia,serif;padding:8px 18px;border:1px solid var(--ink);background:none;cursor:pointer}
+  button.go:disabled{opacity:.35;cursor:not-allowed}
+  .aside{font-size:13px;color:#666;border-left:1px solid var(--line);padding-left:16px}
+
+  /* 2 · numbers */
+  .cards{display:grid;grid-template-columns:repeat(5,1fr);gap:18px}
+  .card{border-top:2px solid var(--ink);padding:10px 0 4px;cursor:pointer}
+  .card.on{border-color:var(--accent)}
+  .card .label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#666}
+  .card .big{font-size:30px;line-height:1.1;margin:4px 0}
+  .card.on .big{color:var(--accent)}
+  .card .unit{font-size:13px;color:var(--mute)}
+  .card svg{display:block;width:100%;height:46px;margin:6px 0}
+  .minib{display:grid;grid-template-columns:8.5em 1fr 3em;gap:5px 10px;align-items:center;font-size:12px;color:#666;margin:8px 0 10px}
+  .minib .track{position:relative;height:6px;background:#f1f1ea}
+  .minib .band{position:absolute;top:0;bottom:0;background:#e3e3d8}
+  .minib .val{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--ink)}
+  .minib .val.out{background:var(--accent)}
+  .minib .num{text-align:right;color:var(--ink);font-variant-numeric:tabular-nums}
+  .stats{display:grid;grid-template-columns:1fr auto;gap:4px 10px;font-size:13px;margin:8px 0 10px}
+  .stats dt{color:#666} .stats dd{margin:0;text-align:right;color:var(--ink)}
+  .stats .grade{color:var(--mute);font-style:italic}
+  .stats .bench{grid-column:1/-1;margin:-2px 0 4px}
+  .bench .track{position:relative;height:6px;background:#eee}
+  .bench .track i{position:absolute;top:0;bottom:0}
+  .bench .nf{background:#ddd} .bench .fic{background:#bbb}
+  .bench .you{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--accent)}
+  .bench .ends{display:flex;justify-content:space-between;font-size:11px;color:var(--mute);font-style:italic;margin-top:3px}
+  .defs{display:grid;grid-template-columns:190px 1fr;gap:8px 18px;font-size:13px;line-height:1.5;margin:14px 0 0}
+  .defs dt{color:var(--ink)} .defs dd{margin:0;color:#555}
+  .detail .bars{margin-top:12px}
+  .cards{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+  .defs .sub{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);margin:2px 0 -4px}
+  .defs .minib{max-width:360px}
+  .defs .note{display:block;font-size:12px;color:var(--mute);font-style:italic}
+  .card .sub{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute);margin:10px 0 -2px}
+  .card .cap{font-size:12px;color:#777;line-height:1.4}
+  .card .more{font-size:12px;color:var(--accent);margin-top:6px;background:none;border:0;padding:0;font-family:inherit;cursor:pointer}
+  .detail{display:none;margin-top:16px;padding:16px 20px;background:#fff;border:1px solid var(--line)}
+  .detail.open{display:block}
+  .detail h3{font-size:13px;letter-spacing:.08em;text-transform:uppercase;margin:0 0 10px;font-weight:400;color:#666}
+  .bars{display:grid;grid-template-columns:170px 1fr 70px;gap:6px 14px;font-size:13px;align-items:center}
+  .bars .track{position:relative;height:10px;background:#f1f1ea}
+  .bars .band{position:absolute;top:0;bottom:0;background:#e3e3d8}
+  .bars .val{position:absolute;top:-2px;bottom:-2px;width:3px;background:var(--ink)}
+  .bars .val.out{background:var(--accent)}
+  .bars .num{text-align:right;color:#555}
+  .detail .note{font-size:12px;color:var(--mute);font-style:italic;margin:10px 0 0}
+
+  /* 3 · your text (map + text + margin) */
+  .reader{display:grid;grid-template-columns:150px 1fr;gap:36px}
+  .map{position:sticky;top:24px;align-self:start}
+  .map .row{height:4px;margin:2px 0;background:#444;cursor:pointer;transition:background .15s,opacity .15s}
+  .map .row.quote{background:#d4d4d4} .map .row.dialogue{background:#888}
+  .map .gap{height:6px} .map .act{height:1px;background:#bbb;margin:8px 0}
+  .map .row:hover,.map .row.on{background:var(--accent)}
+  .map.dim .row{opacity:.18} .map.dim .row.hit{opacity:1;background:var(--accent)}
+  .map .frame{position:absolute;left:-6px;right:-6px;border:1px solid var(--accent);pointer-events:none;transition:top .1s,height .1s}
+  .map .axis{display:flex;justify-content:space-between;font-size:10px;color:var(--mute);border-top:1px solid var(--line);margin-top:6px;padding-top:3px}
+  .map .legend{font-size:11px;color:var(--mute);margin-top:10px;line-height:1.7}
+  .map .legend i{display:inline-block;width:12px;height:4px;margin-right:5px;vertical-align:2px}
+  .para{display:grid;grid-template-columns:1fr 210px;gap:32px;margin-bottom:18px}
+  .para p{margin:0}
+  .para .side{font-size:12px;line-height:1.5;color:#666;border-left:1px solid var(--line);padding-left:14px}
+  .para.quote p{color:#999;font-style:italic;white-space:pre-line}
+  .para.act{display:block;text-align:center;color:var(--mute);letter-spacing:.5em;margin:28px 0}
+  .s{transition:background .15s,color .15s}
+  .s.on{background:var(--tint)}
+  .text.dim .s{color:#bbb} .text.dim .s.hit{color:var(--ink);background:var(--tint)}
+  .adv{border-bottom:1.5px dotted var(--accent)}
+  .zom{background:linear-gradient(transparent 62%,#f1d6d0 62%)}
+  .weak{box-shadow:inset 0 0 0 1px #c9a39c;border-radius:2px;padding:0 2px}
+  .risk{border-bottom:1px solid #bbb}
+  .flag{color:var(--accent)}
+  .keys{font-size:12px;color:#777;margin:0 0 18px;display:flex;gap:18px;flex-wrap:wrap}
+
+  .refs{max-width:760px;font-size:15px;margin:0 0 32px}
+  .refs summary{list-style:none;cursor:pointer;color:var(--mute);font-size:14px;display:inline-block}
+  .refs summary::-webkit-details-marker{display:none}
+  .refs summary::before{content:'▸';display:inline-block;width:1em;transition:transform .15s}
+  .refs[open] summary::before{transform:rotate(90deg)}
+  .refs summary:hover{color:#555}
+  .refs summary .n{font-size:12px}
+  .refs[open] summary{margin-bottom:12px}
+  .refs-intro{color:#555;font-style:italic;margin:0 0 14px}
+  .refs ol{margin:0;padding-left:1.4em}
+  .refs li{margin:0 0 12px;padding-left:4px}
+  .refs cite{font-style:italic}
+  .refs .who{color:#555}
+  .refs .why{display:block;font-size:13px;color:var(--mute)}
+  .refs a{color:var(--accent);text-decoration:none;border-bottom:1px solid #e2b8b1;cursor:pointer}
+  .refs-sub{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:22px 0 8px}
+  .refs .tech{font-size:13px;color:#555}
+  @media (max-width:900px){
+    .page{padding:32px 24px 80px}
+    .paste{grid-template-columns:1fr}
+    .aside{border-left:none;border-top:1px solid var(--line);padding:12px 0 0}
+    .cards{grid-template-columns:repeat(2,1fr)}
+    .reader{grid-template-columns:56px 1fr;gap:20px}
+    .map .legend,.map .axis{display:none}
+    .para{grid-template-columns:1fr;gap:4px}
+    .para .side{border-left:none;padding:0;color:#999}
+  }
+</style></head>
+<body><div class="page">
+  <h1>Writing Analyzer</h1>
+  <p class="kicker">A portrait of your prose, sentence by sentence.</p>
+  <details class="refs">
+    <summary>Inspirations &amp; references <span class="n">(4 books)</span></summary>
+    <p class="refs-intro">This tool distils years of reading about how sentences work. These are the books and essays behind its metrics.</p>
+    <ol>
+      <li><cite>Verb Your Enthusiasm</cite> <span class="who">by Sarah Kaufman</span><span class="why">The case for strong, precise verbs. Shaped <a>Word choice</a> and the weak-verb boxes.</span></li>
+      <li><cite>Line by Line: How to Edit Your Own Writing</cite> <span class="who">by Claire Kehrwald Cook</span><span class="why">Sentence-level editing: cutting wordiness, prepositional chains and nominalizations, and keeping parallel structures parallel. Shaped <a>Word choice</a> and <a>Tactical</a>.</span></li>
+      <li><cite>Analyzing Prose</cite> <span class="who">by Richard A. Lanham</span><span class="why">Reading style as a set of choices: noun style versus verb style, running versus periodic sentences, coordination versus subordination, and the rhythm of sentence length. Shaped <a>Sentence rhythm</a>, <a>Word choice</a> and the clause-linkage counts in <a>Tactical</a>.</span></li>
+      <li><cite>Artful Sentences: Syntax as Style</cite> <span class="who">by Virginia Tufte</span><span class="why">A catalogue of sentence structures, each shown through examples from published prose: openings, appositives, parallelism, cumulative sentences. Shaped <a>Tactical</a>: openers, typology, parallel syntax. Published by Graphics Press, the imprint of her son Edward Tufte, whose design ideas shape this page.</span></li>
+    </ol>
+    <p class="refs-sub">Sources for the formulas</p>
+    <ol class="tech">
+      <li>Rudolf Flesch, “A New Readability Yardstick”, <cite>Journal of Applied Psychology</cite>, 1948. <span class="why">Flesch Reading Ease, in <a>Summary</a>.</span></li>
+      <li>Jean Ure, “Lexical density and register differentiation”, 1971. <span class="why">Lexical density, in <a>Summary</a>.</span></li>
+      <li>Edward Tufte, <cite>The Visual Display of Quantitative Information</cite>. <span class="why">The page’s look: sidenotes, small multiples, the sentence portrait.</span></li>
+    </ol>
+  </details>
+
+  <div class="step">1 · Paste</div>
+  <div class="paste">
+    <div><textarea id="input" placeholder="Paste 100 to 2,000 words of prose here."></textarea><div class="count" id="count"></div><button class="go" id="go">Draw the portrait →</button><p class="status" id="status" aria-live="polite"></p></div>
+    <div class="aside">Your text is sent securely to be analyzed, then discarded. Nothing is saved or logged. Fiction, essays, emails: anything from 100 to 2,000 words. For longer pieces, analyze one scene at a time.</div>
+  </div>
+
+  <div id="results" hidden>
+  <div class="step">2 · The numbers</div>
+  <p class="hint">Click a card to light up its sentences below. “Details” opens the full family.</p>
+  <div class="cards" id="cards"></div>
+  <div class="detail" id="detail"></div>
+
+  <div class="step">3 · Your text</div>
+  <div class="keys"><span><span class="adv">dotted</span> -ly adverb</span><span><span class="zom">shaded</span> zombie noun</span><span><span class="risk">underlined</span> filler / hedge word</span><span><span class="weak">boxed</span> weak verb</span></div>
+  <div class="reader">
+    <div class="map" id="map"></div>
+    <div class="text" id="text"></div>
+  </div>
+  </div>
+
+  <footer class="foot">
+    <a href="https://buymeacoffee.com/laurengy" target="_blank" rel="noopener">☕️ Buy me a coffee</a>
+    <a href="privacy.html">Privacy</a>
+    <span>© 2026 Lauren Y.</span>
+  </footer>
+</div>
+<script>
+const API = 'https://writing-analyzer-1064237024308.us-west1.run.app/analyze';
+const LIMIT = 2000, MIN = 100;
+
+// ---------- input ----------
+const inp=document.getElementById('input'), cnt=document.getElementById('count'), go=document.getElementById('go'), status=document.getElementById('status');
+function updateCount(){
+  const n=(inp.value.trim().match(/\S+/g)||[]).length;
+  cnt.className='count'+(n>LIMIT?' over':n>LIMIT*0.9?' near':'');
+  cnt.textContent = n>LIMIT ? `${n.toLocaleString()} / 2,000 words · try one scene at a time` : `${n.toLocaleString()} / 2,000 words`;
+  go.disabled = n>LIMIT || n<MIN;
+}
+inp.addEventListener('input',updateCount); updateCount();
+
+// sample: analysis precomputed by the API and saved as sample.json, so opening the page costs no server call
+fetch('sample.json').then(r=>r.json()).then(d=>{
+  if(inp.value.trim()) return;
+  inp.value=d.text; updateCount(); render(d);
+  document.getElementById('results').hidden=false;
+  status.className='status sample'; status.innerHTML='Showing a sample: the opening of Edith Wharton’s <i>The House of Mirth</i> (1905). Paste your own text to replace it.';
+}).catch(()=>{});
+
+go.onclick = async () => {
+  go.disabled = true; status.className='status';
+  status.textContent = 'Reading your text… The first run can take a few seconds while the server wakes up.';
+  try {
+    const res = await fetch(API, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({text: inp.value})});
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || 'Something went wrong.');
+    status.textContent = '';
+    render(data);
+    document.getElementById('results').hidden = false;
+    document.getElementById('results').scrollIntoView({behavior:'smooth'});
+  } catch (e) {
+    status.textContent = e instanceof TypeError ? 'Could not reach the server. Check your connection and try again.' : e.message;
+  }
+  updateCount();
+};
+
+// ---------- helpers ----------
+const esc = s => s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const CLS = {weak:'weak', ly:'adv', zombie:'zom', filler:'risk'};
+function hist(vals){ // bars = sentences per length band; numbers on top, band starts below
+  const hi=Math.max(...vals,1), step=hi>60?10:5, bins=Math.floor(hi/step)+1, c=Array(bins).fill(0);
+  vals.forEach(v=>c[Math.floor(v/step)]++); const m=Math.max(...c,1);
+  return `<div class="hist"><div class="cols">${c.map(k=>`<div class="col"><span class="n">${k||''}</span><i style="height:${k/m*40}px"></i></div>`).join('')}</div>`+
+    `<div class="xax">${c.map((_,i)=>`<span>${i%2?'':i*step}</span>`).join('')}</div><div class="xcap">words per sentence, ${step}-word bands →</div></div>`;}
+function bullets(rows,unit=''){ // rows: [label, value, axis max] → label, tick on a track, number
+  return `<div class="minib">${rows.map(([l,v,mx])=>v==null?`<span>${l}</span><span class="track"></span><span class="num">N/A</span>`:
+    `<span>${l}</span><span class="track"><span class="val" style="left:${Math.min(v/mx,1)*100}%"></span></span><span class="num">${v.toFixed(unit?1:2)}${unit}</span>`).join('')}</div>`;}
+const statList = rows => `<dl class="stats">${rows.map(([k,v,x])=>`<dt>${k}</dt><dd>${v}</dd>${x?`<dd class="bench">${x}</dd>`:''}`).join('')}</dl>`;
+const ordinal = n => n + (n%100>=11&&n%100<=13 ? 'th' : ['th','st','nd','rd'][n%10]||'th');
+// Grade from Flesch–Kincaid, so it agrees with the grade in Details.
+const gradeLabel = g => g<1 ? 'pre-school' : g>16 ? 'graduate' : g>12 ? 'college' : `${ordinal(g)} grade`;
+// Stubbs's survey of lexical density: fiction 40–54%, non-fiction 40–65%. Track runs 20–80%.
+const densityBench = d => { const x=v=>`${(Math.min(80,Math.max(20,v))-20)/60*100}%`;
+  return `<div class="track"><i class="nf" style="left:${x(40)};right:calc(100% - ${x(65)})"></i><i class="fic" style="left:${x(40)};right:calc(100% - ${x(54)})"></i><span class="you" style="left:${x(d)}"></span></div><div class="ends"><span>fiction 40–54</span><span>non-fiction 40–65</span></div>`; };
+const defs = rows => `<dl class="defs">${rows.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>`;
+const list = obj => Object.entries(obj).map(([w,c])=>`${esc(w)} ×${c}`).join(', ') || 'none';
+const total = obj => Object.values(obj).reduce((a,b)=>a+b,0);
+const pctOf = (obj,keys) => { const t=total(obj)||1; return keys.map(k=>100*(obj[k]||0)/t); };
+
+const C=document.getElementById('cards'), D=document.getElementById('detail'), M=document.getElementById('map'), T=document.getElementById('text');
+let cards=[], sents=[], active=null, opened=null, frame=null;
+
+// ---------- render ----------
+function render(data){
+  const {summary:S, ratios:R, shares:SH, rhythm:RH, tactical:TA, text} = data;
+
+  // sentences: paragraph breaks come from blank lines between them in the text
+  let prevEnd = 0;
+  sents = data.sentences.map((s,i)=>{
+    const lead = s.text.length - s.text.trimStart().length;
+    const cStart = s.start + lead, cEnd = s.start + s.text.trimEnd().length;
+    const x = {...s, i, paraBreak: i===0 || /\n\s*\n/.test(text.slice(prevEnd, cStart)), lead};
+    prevEnd = cEnd;
+    x.count = k => s.marks.filter(m=>m[2].includes(k)).length;
+    return x;
+  });
+  // dialogue = paragraph opening with a quotation mark
+  let dlg=false; sents.forEach(x=>{ if(x.paraBreak) dlg=/^["“]/.test(x.text.trim()); x.type=dlg?'dialogue':'narr'; });
+  (TA.repeats||[]).forEach(([, , , s2])=>{ if(sents[s2-1]) sents[s2-1].rep=1; });
+
+  const [early,mid,late] = pctOf(TA.position,['Cumulative','Balanced','Periodic']);
+  const [single,coord,sub] = pctOf(TA.connection,['Simple','Parataxis','Hypotaxis']);
+  const opener = Object.entries(TA.openers)[0];
+  const cap = w => w.charAt(0).toUpperCase()+w.slice(1);
+
+  cards=[
+    {label:'Summary', chart:statList([['Words',S.words.toLocaleString()],['Sentences',S.sentences],['Reading time',`${Math.max(1,Math.round(S.reading_time_min))} min`],['Lexical density',`${Math.round(S.lexical_density)}%`,densityBench(S.lexical_density)],['Flesch Reading Ease',`${Math.round(S.flesch_ease)} <span class="grade">· ${gradeLabel(Math.round(S.flesch_grade))}</span>`]]),
+     cap:'Words exclude punctuation.', hit:()=>false,
+     detail:()=>`<h3>Summary · definitions</h3>${defs([
+       ['Reading time','Words ÷ 250 words per minute, a typical adult silent-reading speed.'],
+       ['Lexical density','Share of words that carry content (nouns, verbs, adjectives, adverbs) rather than grammar. In Michael Stubbs’s survey, fiction ran 40–54% and non-fiction 40–65%.'],
+       ['Flesch Reading Ease',`206.835 − 1.015 × (words per sentence) − 84.6 × (syllables per word). Higher is easier to read. Syllables are estimated. Grade level: ${S.flesch_grade}.`]])}`},
+    {label:'Word choice', chart:`<div class="sub">Ratios</div>${bullets([['Verb : noun',R.verb_noun,1.5],['Verb : manner adverb',R.verb_manner_adverb,9],['Noun : adjective',R.noun_adjective,5]])}<div class="sub">Share of all words</div>${bullets([['Be-verbs',SH.be_pct,8],['Prepositions',SH.prep_pct,20],['Zombie nouns',SH.zombie_pct,5],['Adverbs, -ly',SH.ly_pct,5]],'%')}`,
+     cap:'Lit: sentences with two or more zombie nouns or -ly adverbs.', hit:x=>x.count('zombie')+x.count('ly')>1,
+     detail:()=>`<h3>Word choice · definitions</h3>${defs([
+       ['Lexical verb : common noun','Main verbs per common noun. Auxiliaries (be, have, do as helpers, modals) are excluded, so in be-heavy prose many predicates do not count. Low values read as static and noun-heavy; high values read as active.'],
+       ['Verb : manner adverb','Main verbs per adverb of manner (“walked <i>slowly</i>”). Low values suggest verbs leaning on adverbs instead of being precise themselves.'],
+       ['Noun : adjective','Common nouns per adjective. Low values mean many nouns carry an adjective, which can read as ornate.'],
+       ['Be-verbs','Forms of <i>to be</i>, as main verb or helper. Many of them slow a sentence down.'],
+       ['Prepositions','Of, in, on, by… Long chains of prepositional phrases make sentences sprawl.'],
+       ['Zombie nouns',`Nouns made from verbs or adjectives (-tion, -ment, -ness…), which hide the action. Shaded in the text. ${list(TA.zombies)}.`],
+       ['Adverbs, -ly',`Adverbs ending in -ly. Dotted in the text. ${list(TA.ly_words)}.`]])}
+       <p class="note">N/A means the second word type never appears, so the ratio can’t be computed.</p>`},
+    {label:'Sentence rhythm', big:RH.mean.toFixed(1), unit:`words avg · σ ${RH.sd.toFixed(1)}`, chart:hist(RH.lengths),
+     cap:'Number above each bar = sentences of that length. Lit: sentences over 35 words.', hit:x=>x.words>35,
+     detail:()=>`<h3>Sentence rhythm · definitions</h3>${defs([
+       ['Average length',`Words per sentence. Median: ${RH.median}.`],
+       ['Standard deviation','How much sentence lengths vary. Low = even, metronomic; high = long sentences broken by short ones.']])}`},
+    {label:'Tactical', chart:statList([['Weak verbs',total(TA.weak_verbs)],['Close repetitions',TA.repeats.length],['Top opener',opener?`“${esc(cap(opener[0]))}” ×${opener[1]}`:'—'],['Filler / hedge words',total(TA.filler)],['Clauses',TA.clauses.total],['Parallel pairs',TA.parallels.length]]),
+     cap:'Lit: sentences with a weak verb or a close repetition.', hit:x=>x.count('weak')>0||x.rep,
+     detail:()=>`<h3>Tactical stats</h3>${defs([
+       ['Weak verbs',`Get, make, do, go, seem, take, put, give, as main verbs. ${list(TA.weak_verbs)}. Boxed in the text.`],
+       ['Close repetitions',`Same noun or verb (by root form) again within 20 words. ${TA.repeats.map(([w,d,a,b])=>`${esc(w)} (${d} apart, sentence ${b})`).join(', ')||'none'}.`],
+       ['Sentence openers',`First word of each sentence: ${list(TA.openers)}.`],
+       ['Filler / hedge words',`${list(TA.filler)}. Underlined in the text.`],
+       ['Sentence typology',`<div class="sub">Main-verb position</div>${bullets([['Early',early,100],['Middle',mid,100],['Late',late,100]],'%')}<div class="sub">Clause linkage</div>${bullets([['Single clause',single,100],['Coordinated',coord,100],['Subordinated',sub,100]],'%')}<span class="note">Mean root position ${TA.root_ratio_mean ?? '—'} (0 = first word, 1 = last).</span>`],
+       ['Parallel syntax',TA.parallels.map(([a,b,s])=>`Sentences ${a} &amp; ${b}, similarity ${s}: “${esc(sents[a-1].text.trim())}” / “${esc(sents[b-1].text.trim().slice(0,60))}…”`).join('<br>')||'None found. Two neighbouring sentences count when their word-type sequences are over 85% alike.'],
+       ['Clauses',`${TA.clauses.total} total · ${TA.clauses.per_sentence} per sentence${TA.clauses.max?` · most: ${TA.clauses.max.clauses} in sentence ${TA.clauses.max.sentence}`:''}.`],
+       ['Abstract pronouns',`${list(TA.abstract_pronouns)}. <i>That</i> counts only as a pronoun, <i>there</i> only as in “there is”.`]])}`},
+  ];
+
+  // cards
+  C.innerHTML=''; D.innerHTML=''; D.classList.remove('open'); active=null; opened=null;
+  cards.forEach(c=>{
+    const el=document.createElement('div'); el.className='card';
+    el.innerHTML=`<div class="label">${c.label}</div>${c.big!=null?`<div class="big">${c.big} <span class="unit">${c.unit}</span></div>`:''}${c.chart}<div class="cap">${c.cap}</div><button class="more">Details ▾</button>`;
+    el.onclick=()=>light(active===c?null:c);
+    el.querySelector('.more').onclick=e=>{e.stopPropagation(); opened = opened===c?null:c;
+      D.classList.toggle('open',!!opened); D.innerHTML=opened?opened.detail():'';
+      cards.forEach(k=>k.el.querySelector('.more').textContent = k===opened?'Details ▴':'Details ▾');};
+    C.appendChild(el); c.el=el;
+  });
+
+  // map + text
+  M.innerHTML=''; T.innerHTML='';
+  frame=document.createElement('div'); frame.className='frame';
+  const max=Math.max(...sents.map(x=>x.words),1);
+  let buf=[];
+  const flush=()=>{ if(!buf.length) return;
+    const div=document.createElement('div'); div.className='para';
+    const p=document.createElement('p');
+    buf.forEach(x=>{
+      const sp=document.createElement('span'); sp.className='s';
+      sp.innerHTML=markup(x); x.span=sp; p.appendChild(sp); p.append(' ');
+      sp.onmouseenter=()=>x.row.classList.add('on'); sp.onmouseleave=()=>x.row.classList.remove('on');
+      x.row.onmouseenter=()=>sp.classList.add('on'); x.row.onmouseleave=()=>sp.classList.remove('on');
+      x.row.onclick=()=>sp.scrollIntoView({behavior:'smooth',block:'center'});
+    });
+    const w=buf.reduce((a,x)=>a+x.words,0), L=Math.max(...buf.map(x=>x.words)), notes=[`${buf.length} sentence${buf.length>1?'s':''} · ${w} words`];
+    if(L>35) notes.push(`<span class="flag">● a ${L}-word sentence</span>`);
+    if(buf.length>=3 && buf.every(x=>x.words<10)) notes.push('staccato run');
+    const n=k=>buf.reduce((s,x)=>s+x.count(k),0), a=n('ly'), z=n('zombie'), wk=n('weak');
+    if(a) notes.push(`${a} -ly adverb${a>1?'s':''}`); if(z) notes.push(`${z} zombie noun${z>1?'s':''}`); if(wk) notes.push(`${wk} weak verb${wk>1?'s':''}`);
+    const side=document.createElement('div'); side.className='side'; side.innerHTML=notes.join('<br>');
+    div.append(p,side); T.appendChild(div); buf=[];
+  };
+  sents.forEach(x=>{
+    if(x.paraBreak){ flush(); if(x.i) M.appendChild(Object.assign(document.createElement('div'),{className:'gap'})); }
+    const d=document.createElement('div'); d.className='row '+x.type; d.style.width=(x.words/max*100)+'%'; x.row=d; M.appendChild(d);
+    buf.push(x);
+  });
+  flush();
+  M.appendChild(frame);
+  M.insertAdjacentHTML('beforeend',`<div class="axis"><span>0</span><span>${max} words</span></div><div class="legend"><i style="background:#444"></i>narration<br><i style="background:#888"></i>dialogue<br><i style="border:1px solid #ad3627;height:6px;box-sizing:border-box"></i>on screen</div>`);
+  requestAnimationFrame(updateFrame);
+}
+
+// sentence text with its word marks, leading whitespace dropped
+function markup(x){
+  const t=x.text; let out='', pos=x.lead;
+  [...x.marks].sort((a,b)=>a[0]-b[0]).forEach(([off,len,kinds])=>{
+    if(off<pos) return;
+    out+=esc(t.slice(pos,off))+`<span class="${kinds.map(k=>CLS[k]).join(' ')}">${esc(t.slice(off,off+len))}</span>`;
+    pos=off+len;
+  });
+  return (out+esc(t.slice(pos).trimEnd())).replace(/\n/g,'<br>');
+}
+
+function light(c){
+  active=c;
+  cards.forEach(k=>k.el.classList.toggle('on',k===c));
+  M.classList.toggle('dim',!!c); T.classList.toggle('dim',!!c);
+  sents.forEach(x=>{const h=!!c&&c.hit(x); x.row.classList.toggle('hit',h); x.span.classList.toggle('hit',h);});
+}
+
+document.querySelectorAll('.refs a').forEach(a=>a.onclick=()=>{const c=cards.find(k=>k.label===a.textContent); if(!c) return;
+  c.el.scrollIntoView({behavior:'smooth',block:'center'}); light(c);});
+
+// frame = sentences currently on screen
+function updateFrame(){
+  if(!frame) return;
+  const vis=sents.filter(x=>{const r=x.span.getBoundingClientRect(); return r.bottom>0 && r.top<innerHeight;});
+  if(!vis.length){frame.style.display='none';return;}
+  frame.style.display='block';
+  const a=vis[0].row, b=vis[vis.length-1].row;
+  frame.style.top=(a.offsetTop-3)+'px'; frame.style.height=(b.offsetTop+b.offsetHeight-a.offsetTop+6)+'px';
+}
+addEventListener('scroll',updateFrame,{passive:true}); addEventListener('resize',updateFrame);
+</script>
+</body></html>

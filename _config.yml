@@ -11,12 +11,12 @@ theme: minima
 # ---- Front page / About / section pages (layout: front) ----
 # Left-hand menu, in order.
 front_menu:
-  - title: "Personal Projects"
-    url: "/projects/"
+  - title: "Side Builds"
+    url: "/side-builds/"
   - title: "Product & Data"
     url: "/product-data/"
-  - title: "Design Studio"
-    url: "/design-studio/"
+  - title: "Remix"
+    url: "/remix/"
   - title: "The Classics Club"
     url: "/shelf/"
   - title: "About"
@@ -59,6 +59,7 @@ show_excerpts: false
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
+  - jekyll-redirect-from
 
 exclude:
   - README.md
