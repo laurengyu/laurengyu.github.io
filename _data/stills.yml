@@ -52,7 +52,6 @@
 - file: lazarus-island.jpg
   title: Lazarus Island
   credit: photograph by Lauren Y., February 2023, Singapore
-  portrait: true
   color: "#748642"
 - file: malacca-tigers.jpg
   title: Three Tigers
@@ -62,3 +61,7 @@
   title: Hanuman, Ramakien mural
   credit: photograph by Lauren Y., December 2022, Grand Palace, Bangkok, Thailand
   color: "#987b4a"
+- file: taipei-peacock.jpg
+  title: Peacock
+  credit: photograph by Lauren Y., December 2023, Taipei, Taiwan
+  color: "#967d41"
