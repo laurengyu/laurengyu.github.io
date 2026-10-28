@@ -49,3 +49,8 @@
   title: "Please don’t check yourself out"
   credit: photograph by Lauren Y., December 2021, Berlin, Germany
   color: "#336479"
+- file: lazarus-island.jpg
+  title: Lazarus Island
+  credit: photograph by Lauren Y., February 2023, Singapore
+  portrait: true
+  color: "#748642"
