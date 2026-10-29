@@ -278,7 +278,7 @@ function render(data){
        ['Lexical density','Share of words that carry content (nouns, verbs, adjectives, adverbs) rather than grammar. In Michael Stubbs’s survey, fiction ran 40–54% and non-fiction 40–65%.'],
        ['Flesch Reading Ease',`206.835 − 1.015 × (words per sentence) − 84.6 × (syllables per word). Higher is easier to read. Syllables are estimated. Grade level: ${S.flesch_grade}.`]])}`},
     {label:'Word choice', chart:`<div class="sub">Ratios</div>${bullets([['Verb : noun',R.verb_noun,1.5],['Verb : manner adverb',R.verb_manner_adverb,9],['Noun : adjective',R.noun_adjective,5]])}<div class="sub">Share of all words</div>${bullets([['Be-verbs',SH.be_pct,8],['Prepositions',SH.prep_pct,20],['Zombie nouns',SH.zombie_pct,5],['Adverbs, -ly',SH.ly_pct,5]],'%')}`,
-     cap:'Lit: sentences with two or more zombie nouns or -ly adverbs.', hit:x=>x.count('zombie')+x.count('ly')>1,
+     cap:'Click to highlight sentences with two or more zombie nouns or -ly adverbs.', hit:x=>x.count('zombie')+x.count('ly')>1,
      detail:()=>`<h3>Word choice · definitions</h3>${defs([
        ['Lexical verb : common noun','Main verbs per common noun. Auxiliaries (be, have, do as helpers, modals) are excluded, so in be-heavy prose many predicates do not count. Low values read as static and noun-heavy; high values read as active.'],
        ['Verb : manner adverb','Main verbs per adverb of manner (“walked <i>slowly</i>”). Low values suggest verbs leaning on adverbs instead of being precise themselves.'],
@@ -289,12 +289,12 @@ function render(data){
        ['Adverbs, -ly',`Adverbs ending in -ly. Dotted in the text. ${list(TA.ly_words)}.`]])}
        <p class="note">N/A means the second word type never appears, so the ratio can’t be computed.</p>`},
     {label:'Sentence rhythm', big:RH.mean.toFixed(1), unit:`words avg · σ ${RH.sd.toFixed(1)}`, chart:hist(RH.lengths),
-     cap:'Number above each bar = sentences of that length. Lit: sentences over 35 words.', hit:x=>x.words>35,
+     cap:'Number above each bar = sentences of that length. Click to highlight sentences over 35 words.', hit:x=>x.words>35,
      detail:()=>`<h3>Sentence rhythm · definitions</h3>${defs([
        ['Average length',`Words per sentence. Median: ${RH.median}.`],
        ['Standard deviation','How much sentence lengths vary. Low = even, metronomic; high = long sentences broken by short ones.']])}`},
     {label:'Tactical', chart:statList([['Weak verbs',total(TA.weak_verbs)],['Close repetitions',TA.repeats.length],['Top opener',opener?`“${esc(cap(opener[0]))}” ×${opener[1]}`:'—'],['Filler / hedge words',total(TA.filler)],['Clauses',TA.clauses.total],['Parallel pairs',TA.parallels.length]]),
-     cap:'Lit: sentences with a weak verb or a close repetition.', hit:x=>x.count('weak')>0||x.rep,
+     cap:'Click to highlight sentences with a weak verb or a close repetition.', hit:x=>x.count('weak')>0||x.rep,
      detail:()=>`<h3>Tactical stats</h3>${defs([
        ['Weak verbs',`Get, make, do, go, seem, take, put, give, as main verbs. ${list(TA.weak_verbs)}. Boxed in the text.`],
        ['Close repetitions',`Same noun or verb (by root form) again within 20 words. ${TA.repeats.map(([w,d,a,b])=>`${esc(w)} (${d} apart, sentence ${b})`).join(', ')||'none'}.`],
