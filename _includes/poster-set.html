@@ -1,6 +1,6 @@
 {%- comment -%}
   A row of thumbnails, each opening a detail view: the image on the left, its notes on the right.
-  include.items: list of { title, film, image, more (optional extra images), description }
+  include.items: list of { title, film, image, more (optional extra images), description, date }
   include.set:   short id, so swiping stays within this set
   include.part:  "row" for the thumbnails; "views" for the detail views, which must sit outside
                  <details>: a closed <details> renders none of its content, not even a modal.
@@ -20,6 +20,9 @@
     <h2>{{ poster.title | escape }}</h2>
     <p class="poster-film">{{ poster.film | escape }}</p>
     <p>{{ poster.description }}</p>
+    {%- if poster.date %}
+    <p class="poster-date">Designed in {{ poster.date | escape }}</p>
+    {%- endif %}
   </div>
 </dialog>
 {%- endfor %}

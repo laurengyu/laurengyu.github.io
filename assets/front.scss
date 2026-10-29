@@ -259,7 +259,7 @@ $poster-top: $f-top - 44px;   // just under the name, so "Lauren Y." stays whole
   .poster-text { flex: 0 1 320px; position: sticky; top: 0; }   // notes stay put while extra versions scroll
   h2 { margin: 0 0 6px; font-size: 20px; font-weight: 600; }
   p { margin: 0 0 16px; font-size: 16px; line-height: 1.5; }
-  .poster-film { color: $f-muted; }
+  .poster-film, .poster-date { color: $f-muted; }
   .poster-count { margin-bottom: 12px; font-size: 13px; letter-spacing: 0.06em; color: $f-muted; }   // hints there are more to swipe through
 }
 .poster-close {
