@@ -367,7 +367,7 @@ function light(c){
   active=c;
   cards.forEach(k=>k.el.classList.toggle('on',k===c));
   M.classList.toggle('dim',!!c); T.classList.toggle('dim',!!c);
-  sents.forEach(x=>{const h=!!c&&c.hit(x); x.row.classList.toggle('hit',h); x.span.classList.toggle('hit',h);});
+  sents.forEach(x=>{const h=!!(c&&c.hit(x)); x.row.classList.toggle('hit',h); x.span.classList.toggle('hit',h);});
 }
 
 document.querySelectorAll('.refs a').forEach(a=>a.onclick=()=>{const c=cards.find(k=>k.label===a.textContent); if(!c) return;
