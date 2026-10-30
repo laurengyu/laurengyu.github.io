@@ -41,11 +41,13 @@ body_class: front--pinned
       <rect class="metro-terminus" x="636" y="396" width="28" height="8"/>
       <g class="metro-badge" transform="translate(650 432)"><circle r="15"/><text y="6">P</text></g>
       <text class="metro-linename" x="300" y="238">Productivity</text>
-      <g class="metro-station" data-id="attention" tabindex="0" transform="translate(440 210)">
-        <rect class="metro-hit" x="-85" y="-48" width="170" height="58"/>
-        <rect class="metro-tick" x="-3.5" y="-17" width="7" height="13"/>
-        <text class="metro-label" y="-26" text-anchor="middle">Attention Filter</text>
-      </g>
+      <a href="{{ '/side-builds/attention-filter/' | relative_url }}">
+        <g class="metro-station" data-id="attention" transform="translate(440 210)">
+          <rect class="metro-hit" x="-85" y="-48" width="170" height="58"/>
+          <rect class="metro-tick" x="-3.5" y="-17" width="7" height="13"/>
+          <text class="metro-label" y="-26" text-anchor="middle">Attention Filter</text>
+        </g>
+      </a>
       <g class="metro-station" data-id="signal" tabindex="0" transform="translate(650 320)">
         <rect class="metro-hit" x="-170" y="-18" width="180" height="36"/>
         <rect class="metro-tick" x="-17" y="-3.5" width="13" height="7"/>
@@ -59,7 +61,7 @@ body_class: front--pinned
       <rect class="metro-terminus" x="56" y="356" width="8" height="28"/>
       <g class="metro-badge" transform="translate(28 370)"><circle r="15"/><text y="6">S</text></g>
       <text class="metro-linename" x="80" y="398">Studio</text>
-      <a href="{{ '/side-builds/writing-analyzer/' | relative_url }}" target="_blank" rel="noopener">
+      <a href="{{ '/side-builds/writing-analyzer/' | relative_url }}">
         <g class="metro-station" data-id="writing" transform="translate(140 370)">
           <rect class="metro-hit" x="-85" y="-48" width="170" height="58"/>
           <rect class="metro-tick" x="-3.5" y="-17" width="7" height="13"/>
@@ -158,6 +160,12 @@ body_class: front--pinned
       };
       var map = document.querySelector(".metro");
       var info = document.querySelector(".metro-info");
+
+      // Every station link opens in a new tab, so new stations don't need to say so.
+      map.querySelectorAll("a").forEach(function (a) {
+        a.setAttribute("target", "_blank"); // SVG <a>: .target is read-only
+        a.setAttribute("rel", "noopener");
+      });
 
       // Pick one line out: every other route fades (see .has-focus in the styles).
       function focusLine(line) {
