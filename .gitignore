@@ -8,5 +8,6 @@ vendor/
 
 # Local-only files (not part of the public repo)
 to-do list.md
+plan.md
 .claude/
 sample.txt
