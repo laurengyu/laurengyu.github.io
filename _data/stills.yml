@@ -29,55 +29,55 @@
   title: Suspiria
   credit: Dario Argento, 1977, Italy
   color: "#912e38"
-- file: doi-inthanon.jpg
-  title: The King and Queen Pagodas, Doi Inthanon
-  credit: photographed in August 2023, Chiang Mai, Thailand
+- file: twin-pagodas.jpg
+  title: The King and Queen Pagodas
+  credit: photographed in 2023, Thailand
   color: "#657e36"
-- file: berlin-window.jpg
+- file: self-checkout.jpg
   title: "Please don’t check yourself out"
-  credit: photographed in December 2021, Berlin, Germany
+  credit: photographed in 2021, Germany
   color: "#336479"
-- file: lazarus-island.jpg
-  title: Lazarus Island
-  credit: photographed in February 2023, Singapore
+- file: island.jpg
+  title: The Island
+  credit: photographed in 2023, Singapore
   color: "#748642"
-- file: malacca-tigers.jpg
+- file: three-tigers.jpg
   title: Three Tigers
-  credit: photographed in August 2022, Malacca, Malaysia
+  credit: photographed in 2022, Malaysia
   color: "#537c0b"
-- file: grand-palace-mural.jpg
+- file: hanuman-mural.jpg
   title: Hanuman, Ramakien mural
-  credit: photographed in December 2022, Grand Palace, Bangkok, Thailand
+  credit: photographed in 2022, Thailand
   color: "#987b4a"
-- file: taipei-peacock.jpg
+- file: peacock.jpg
   title: Peacock
-  credit: photographed in December 2023, Taipei, Taiwan
+  credit: photographed in 2023, Taiwan
   color: "#967d41"
-- file: hue-nam-phuong.jpg
+- file: nam-phuong.jpg
   title: Portrait of Empress Nam Phương
-  credit: photographed in May 2025, Huế, Vietnam
+  credit: photographed in 2025, Vietnam
   color: "#a0804b"
-- file: stanford-theatre.jpg
-  title: The Stanford Theatre
-  credit: photographed in April 2019, Palo Alto, USA
+- file: theatre.jpg
+  title: The Old Movie Palace
+  credit: photographed in 2019, USA
   color: "#a8695b"
-- file: long-beach-skeleton.jpg
+- file: organ-skeleton.jpg
   title: Skeleton at the Organ
-  credit: photographed in September 2019, Long Beach, USA
+  credit: photographed in 2019, USA
   color: "#855137"
-- file: evanston-lakefront.jpg
-  title: Lake Michigan
-  credit: photographed in October 2016, Evanston, USA
+- file: lakefront.jpg
+  title: The Lake
+  credit: photographed in 2016, USA
   color: "#7fa2da"
-- file: seattle-bangs.jpg
+- file: bangs.jpg
   title: "Don’t cut your own bangs"
-  credit: photographed in November 2018, Seattle, USA
+  credit: photographed in 2018, USA
   color: "#6b4b8b"
 - file: ockhams-razor.jpg
   title: "Ockham’s Razor"
-  credit: photographed in January 2021, Singapore
+  credit: photographed in 2021, Singapore
   color: "#b3255d"
-- file: berlin-fritz.jpg
+- file: fritz-kola.jpg
   title: fritz-kola, my favorite drink
-  credit: photographed in December 2021, Berlin, Germany
+  credit: photographed in 2021, Germany
   color: "#cb692b"
