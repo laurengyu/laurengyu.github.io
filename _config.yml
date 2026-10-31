@@ -19,6 +19,7 @@ front_menu:
     url: "/design-studio/"
   - title: "The Corner Shelf"
     url: "/shelf/"
+    new_tab: true
   - title: "About"
     url: "/about/"
 
@@ -31,6 +32,7 @@ social:
 # ---- The Corner Shelf (everything under /shelf/, Tumblr look) ----
 shelf:
   title: "The Corner Shelf"
+  tagline: "What I'm reading, and what I make of it."
   description: "A reading blog by Helena L."
   author: "Helena Lyndon"
 

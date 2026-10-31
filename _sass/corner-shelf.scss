@@ -47,11 +47,12 @@ img { max-width: 100%; height: auto; }
   &::after { display: none; } // Minima's clearfix pseudo-element would act as a third flex item
 }
 .cs-brand, .cs-brand:visited, .cs-brand:hover { display: flex; align-items: center; gap: 22.4px; text-decoration: none; color: $cs-text; }
-.cs-cover { width: 76px; height: 76px; border-radius: 50%; object-fit: cover; background: $cs-rule; flex-shrink: 0; }
+.cs-brand .initial { height: 1.3em; width: auto; vertical-align: -.28em; margin-right: 2px; }
 .cs-brand__text { display: flex; flex-direction: column; }
+.cs-tagline { font-size: 15px; font-style: italic; color: $cs-muted; margin-top: 4px; }
 .cs-header .site-title {
   float: none;
-  font-size: 27px;
+  font-size: 44px;
   font-weight: 500;
   line-height: 1.25;
   letter-spacing: 0;
@@ -65,12 +66,12 @@ img { max-width: 100%; height: auto; }
   a, a:visited { color: $cs-muted; text-decoration: none; }
   a:hover { color: $cs-text; }
 }
-.cs-rule { border: 0; border-top: 1px solid $cs-rule; margin: 44px 0 0; }
+.cs-rule { border: 0; border-top: 1px solid $cs-rule; margin: 26.4px 0 0; }
 
 // ---- Main ----
 .page-content { padding: 0 0 120px; }
 
-.post, .page { padding-top: 34.4px; }
+.post, .page { padding-top: 20.6px; }
 
 .post-title, .post-header .post-title, .page-heading {
   font-size: 25px;
@@ -105,7 +106,7 @@ blockquote {
 .cs-post-list {
   list-style: none;
   margin: 0;
-  padding-top: 34.4px;
+  padding-top: 20.6px;
 }
 .cs-entry {
   display: flex;
@@ -142,8 +143,7 @@ blockquote {
 @media only screen and (max-width: 760px) {
   .wrapper { padding-left: 20px; padding-right: 20px; }
   .site-header.cs-header { padding-top: 60px; }
-  .cs-header .site-title { font-size: 23px; }
-  .cs-cover { width: 60px; height: 60px; }
+  .cs-header .site-title { font-size: 38px; }
   .cs-brand { gap: 1.1rem; }
   .cs-header__inner { flex-direction: column; align-items: flex-start; gap: 1.1rem; }
   .cs-nav { flex-wrap: wrap; gap: 1.1rem; }

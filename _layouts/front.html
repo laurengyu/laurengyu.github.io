@@ -31,7 +31,7 @@
       <ul>
         {%- for item in site.front_menu -%}
         {%- assign item_url = item.url | relative_url -%}
-        <li><a href="{{ item_url }}"{% assign url_head = page.url | slice: 0, item.url.size %}{% if url_head == item.url %} aria-current="page"{% endif %}>{{ item.title | escape }}</a></li>
+        <li><a href="{{ item_url }}"{% if item.new_tab %} target="_blank" rel="noopener"{% endif %}{% assign url_head = page.url | slice: 0, item.url.size %}{% if url_head == item.url %} aria-current="page"{% endif %}>{{ item.title | escape }}</a></li>
         {%- endfor -%}
       </ul>
       <ul class="front-social">

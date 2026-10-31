@@ -1,9 +1,10 @@
 <header class="site-header cs-header" role="banner">
   <div class="wrapper cs-header__inner">
     <a class="cs-brand" href="{{ '/shelf/' | relative_url }}">
-      <img class="cs-cover" src="{{ '/assets/cover.jpg' | relative_url }}" alt="" width="56" height="56">
       <span class="cs-brand__text">
-        <span class="site-title">{{ site.shelf.title | escape }}</span>
+        {%- comment -%} Floriated initial (Zallman Caps) as SVG, same as Attention Filter; aria-label carries the real title {%- endcomment -%}
+        <span class="site-title" aria-label="{{ site.shelf.title | escape }}">{% include icons/initial-t.svg %}<span aria-hidden="true">{{ site.shelf.title | slice: 1, 100 | escape }}</span></span>
+        <span class="cs-tagline">{{ site.shelf.tagline | escape }}</span>
       </span>
     </a>
     <nav class="cs-nav" aria-label="Site">
