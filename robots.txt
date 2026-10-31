@@ -1,3 +1,4 @@
-# Ask search engines not to crawl this site.
+# Crawling is allowed on purpose: Google has to read each page to see its
+# noindex tag. Blocking crawlers here would hide that tag.
 User-agent: *
-Disallow: /
+Allow: /
