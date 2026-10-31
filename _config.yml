@@ -40,8 +40,6 @@ shelf:
 nav_links:
   - title: "Booklist"
     url: "/shelf/list"
-  - title: "Main Blog"
-    url: "/"
   - title: "The Classics Club"
     url: "https://theclassicsclubblog.wordpress.com/"
 
